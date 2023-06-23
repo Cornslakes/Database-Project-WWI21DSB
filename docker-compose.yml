@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+    database:
+        image: 'postgres:12.3'
+        ports:
+            - '5433:5432'
+        container_name: database-project
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: 123
+            POSTGRES_DB: hospital
+        volumes:
+            - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+            - ./database_populate.sql:/docker-entrypoint-initdb.d/2-data_populate.sql
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 1234:8080
+        depends_on:
+            - "database"
+
+
