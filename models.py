@@ -12,5 +12,3 @@ class Medicine(db.Model):
 
      def __init__(self, name):
         self.Medicine_Name = name
-
-                     

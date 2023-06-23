@@ -21,8 +21,3 @@ def index():
     title="List of medicine stock:"
     medicine = Medicine.query.order_by(Medicine.Medicine_Name.desc()).all()
     return render_template('medicine.html', medicine=medicine)
-
-
-
-
-
