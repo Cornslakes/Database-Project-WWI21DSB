@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 import os
 
 app = Flask (__name__)
+app.app_context().push()
 bootstrap = Bootstrap(app)
 
 app.config[

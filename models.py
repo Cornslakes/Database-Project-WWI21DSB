@@ -3,12 +3,24 @@ from flask import Flask
 from app import db
 
 
+class Supplier(db.Model):
+     __tablename__ = 'Supplier'
+     Supplier_ID = db.Column(db.UUID, primary_key = True)
+     Supplier_Name = db.Column(db.String)
+     Supplier_Mail = db.Column(db.String)
+     Supplier_TelNr= db.Column(db.Integer)
+
 class Medicine(db.Model):
      __tablename__ = 'Medicine'
-     Medicine_ID = db.Column(db.String(100), primary_key = True)
+     Medicine_ID = db.Column(db.UUID, primary_key = True)
      Medicine_Name = db.Column(db.String)
-     Medicine_Pricing = db.Column(db.String(100))
+     Medicine_Pricing = db.Column(db.String)
      Medicine_Amount= db.Column(db.Integer)
 
-     def __init__(self, name):
-        self.Medicine_Name = name
+class Medicine_Supplier(db.Model):
+     __tablename__ = 'Medicine_Supplier'
+     id = db.Column(db.Integer, primary_key=True)
+     Medicine_Medicine_ID = db.Column(db.UUID, foreign_keys=Medicine.Medicine_ID)
+     Supplier_Supplier_ID = db.Column(db.UUID, foreign_keys=Supplier.Supplier_ID)
+    
+
