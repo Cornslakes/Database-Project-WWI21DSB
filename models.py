@@ -22,5 +22,11 @@ class Medicine_Supplier(db.Model):
      id = db.Column(db.Integer, primary_key=True)
      Medicine_Medicine_ID = db.Column(db.UUID, foreign_keys=Medicine.Medicine_ID)
      Supplier_Supplier_ID = db.Column(db.UUID, foreign_keys=Supplier.Supplier_ID)
-    
 
+class Patient(db.Model):
+     __tablename__ = 'Patient'
+     Patient_ID = db.Column(db.UUID, primary_key = True)
+     Patient_Name = db.Column(db.Text)
+     Patient_Forename = db.Column(db.Text)
+     Patient_Sex = db.Column(db.Text)
+     Patient_Birthdate = db.Column(db.Date)

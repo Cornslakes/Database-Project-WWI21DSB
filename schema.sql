@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS public."Medicine_Supplier"
 CREATE TABLE IF NOT EXISTS public."Patient"
 (
     "Patient_ID" uuid,
-    "Patient_Name" character,
-    "Patient_Forename" character,
-    "Patient_Sex" character(1),
+    "Patient_Name" text,
+    "Patient_Forename" text,
+    "Patient_Sex" character,
     "Patient_Birthdate" date,
     "Room_Nr" smallint,
     "Station_Nr" smallint,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS public."Patient_Medicine"
 CREATE TABLE IF NOT EXISTS public."Address"
 (
     "Address_ID" uuid,
-    "Address_Street" character,
+    "Address_Street" character varying,
     "Address_HNr" character varying,
     "Place_ID" uuid,
     PRIMARY KEY ("Address_ID")
@@ -67,11 +67,11 @@ CREATE TABLE IF NOT EXISTS public."Place"
 CREATE TABLE IF NOT EXISTS public."Employee"
 (
     "Employee_ID" uuid,
-    "Employee_Name" character,
-    "Employee_Forename" character,
+    "Employee_Name" text,
+    "Employee_Forename" text,
     "Employee_Birthdate" date,
     "Employee_Salary" money,
-    "Employee_Role" character,
+    "Employee_Role" text,
     "Address_ID" uuid,
     PRIMARY KEY ("Employee_ID")
 );
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS public."Employee"
 CREATE TABLE IF NOT EXISTS public."Station"
 (
     "Station_Nr" smallint,
-    "Station_Name" character,
+    "Station_Name" text,
     "Station_Amount_of_rooms" smallint,
     PRIMARY KEY ("Station_Nr")
 );
