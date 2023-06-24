@@ -1,32 +1,37 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-
-{% block title %}Company{% endblock %}
-
-{% block page_content %}
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
+title %}Company{% endblock %} {% block page_content %}
 <div class="page-header">
-    <h1>List of patients:</h1> 
-    <table class="table table-dark table-striped ">
-        <thead class="thead-dark" >
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Forename</th>
-              <th scope="col">Sex</th>
-              <th scope="col">Birthdate</th>
-            </tr>
-          </thead>        
-        <tbody>
-         {% for patient in patient %}
-         <tr>
-              <td class="med_name">{{ loop.index }}</td>
-              <td class="med_name">{{patient.Patient_Name}}</td>
-              <td class="med_name">{{patient.Patient_Forename}}</td>
-              <td class="med_name">{{patient.Patient_Sex}}</td>
-              <td class="med_name">{{patient.Patient_Birthdate}}</td>
-              <td class="med_name"><a href="{{ url_for('delete_patient', id=patient.Patient_ID) }}" onclick="return confirm('Do you want to permanently delete patient {{ patient.Patient_Name }}?');" title="Delete Patient"><button type="button" class="btn btn-danger">X</button></a></td>
-         {% endfor %}
-        </tbody>
-    </table>
+  <h1>List of patients:</h1>
+  <table class="table table-dark table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Forename</th>
+        <th scope="col">Sex</th>
+        <th scope="col">Birthdate</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for patient in patient %}
+      <tr>
+        <td class="med_name">{{ loop.index }}</td>
+        <td class="med_name">{{patient.Patient_Name}}</td>
+        <td class="med_name">{{patient.Patient_Forename}}</td>
+        <td class="med_name">{{patient.Patient_Sex}}</td>
+        <td class="med_name">{{patient.Patient_Birthdate}}</td>
+        <td class="med_name">
+          <a
+            href="{{ url_for('delete_patient', id=patient.Patient_ID) }}"
+            onclick="return confirm('Do you want to permanently delete patient {{ patient.Patient_Name }}?');"
+            title="Delete Patient"
+            ><button type="button" class="btn btn-danger">X</button></a
+          >
+        </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+  <a href="/add_patient">Add new patient</a>
 </div>
 {% endblock %}
