@@ -22,7 +22,7 @@ bootstrap = Bootstrap(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:123@localhost:5433/hospital"
 
 db = SQLAlchemy(app)
-from models import Medicine, Patient
+from models import Medicine, Patient, Employee
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -73,7 +73,7 @@ class PatientForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
-# Routing to the form that adds Patinets
+# Routing to the form that adds patients
 @app.route("/add_patient", methods=["GET", "POST"])
 def add_patient():
     form = PatientForm()
@@ -94,9 +94,7 @@ def add_patient():
 
 
 # -------Delete Patient-------
-
-
-# Routing to Delete functionality for patients
+# Routing to delete functionality for patients
 @app.route("/delete_patient/<id>")
 def delete_patient(id):
     patient = Patient.query.filter_by(Patient_ID=id).first()
@@ -108,9 +106,9 @@ def delete_patient(id):
     return redirect("/patient")
 
 
-# ----------------------------------------------------------
-# ------------------Functionality Medicine------------------
-# ----------------------------------------------------------
+# ---------------------------------------------------------
+# ------------------Functionality Medicine-----------------
+# ---------------------------------------------------------
 
 
 # -------Displaying Medicine Table-------
@@ -201,7 +199,7 @@ class ChangeMedicineForm(FlaskForm):
 # Routing to the form that adds medicines
 @app.route("/change_medicine/<id>", methods=["GET", "POST"])
 def change_medicine(id):
-    form = ChangeMedicineForm("Hallo")
+    form = ChangeMedicineForm()
     medicine = Medicine.query.filter_by(Medicine_ID=id).first()
 
     if form.validate_on_submit():
@@ -232,3 +230,13 @@ def stock_minus_one(id):
     else:
         flash("Error: Minimum stock is 0")
     return redirect("/medicine")
+
+# ---------------------------------------------------------
+# ------------------Functionality Employee-----------------
+# ---------------------------------------------------------
+
+@app.route("/staff")
+def employee_staff():
+    title = "List of all staffed employees:"
+    employee = Employee.query.order_by(Employee.Employee_Name.desc()).all()
+    return render_template("employee.html", employee=employee)

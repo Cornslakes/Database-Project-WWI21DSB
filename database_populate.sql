@@ -18,3 +18,11 @@ VALUES
   ('d57b2a6d-7da9-44c6-a2c1-59811b77b1d3', 'Johnson', 'Michael', 'M', '1978-08-22'),
   ('f3a70776-574b-4399-93f2-52b036e78a2a', 'Williams', 'Emily', 'F', '1995-11-10'),
   ('83b54769-03f9-49d5-9ccf-1e1593ae2428', 'Anderson', 'Robert', 'M', '1982-06-05');
+
+INSERT INTO public."Employee" ("Employee_ID", "Employee_Name", "Employee_Forename", "Employee_Birthdate", "Employee_Salary", "Employee_Role")
+VALUES 
+    ('7f9d7576-754d-4e24-b5d3-87c82e2f1e3b', 'Smith', 'John', '1990-05-15', '$8000.00', 'Doctor'),
+    ('f4ebc743-1f7e-4e7b-9f7a-dbaa4c8efdb5', 'Johnson', 'Emily', '1985-12-02', '$5000.00', 'Nurse'),
+    ('d3ed2ab0-cd55-4f89-8b84-3a433af6d70d', 'Williams', 'Sarah', '1992-07-10', '$8000.00', 'Doctor'),
+    ('08a678ce-d5e1-495d-9892-4e042ef4005f', 'Brown', 'Michael', '1993-09-20', '$5000.00', 'Nurse'),
+    ('ae9a60c5-2d4e-4f35-b8d0-9cfe9273a5f2', 'Davis', 'Jennifer', '1995-04-18', '$8000.00', 'Doctor');
