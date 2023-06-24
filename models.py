@@ -16,13 +16,7 @@ class Medicine(db.Model):
      Medicine_Name = db.Column(db.String)
      Medicine_Pricing = db.Column(db.String)
      Medicine_Amount= db.Column(db.Integer)
-
-class Medicine_Supplier(db.Model):
-     __tablename__ = 'Medicine_Supplier'
-     id = db.Column(db.Integer, primary_key=True)
-     Medicine_Medicine_ID = db.Column(db.UUID, foreign_keys=Medicine.Medicine_ID)
-     Supplier_Supplier_ID = db.Column(db.UUID, foreign_keys=Supplier.Supplier_ID)
-
+     
 class Patient(db.Model):
      __tablename__ = 'Patient'
      Patient_ID = db.Column(db.UUID, primary_key = True)
