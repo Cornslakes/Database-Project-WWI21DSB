@@ -34,5 +34,17 @@ VALUES
     ('9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', 'Springvale', 5),
     ('eca57c86-2a61-4e68-84b2-8978c876aad4', 'Autumnwood', 8),
     ('d6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', 'Winterhaven', 6),
-    ('1a2b3c4d-5e6f-7g8h-9i10-jk11l12m13n', 'Harmony Hills', 7);
+    ('3f09de30-525f-4ad3-9b8a-fb7f8df515c8', 'Harmony Hills', 7);
 
+INSERT INTO public."Room" ("Room_Nr", "Room_Size", "Room_isFull", "Station_ID", "Room_ID")
+VALUES 
+    (1, 10, false, '43aebc23-7b9f-4f15-a652-4be9e13faa1f', '0818ed14-5a2a-4e72-ae68-7ccf8932ef5d'),
+    (2, 8, false, '43aebc23-7b9f-4f15-a652-4be9e13faa1f', 'e6429ef2-137b-4dd9-bff3-34b2f9eac074'),
+    (1, 5, false, '9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', '8d3a5273-62f4-4dcf-b7f2-7b417c9ce3e2'),
+    (2, 7, false, '9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', '879a9650-180a-4d0b-9bc1-1d4809d8a9e7'),
+    (1, 8, false, 'eca57c86-2a61-4e68-84b2-8978c876aad4', '4e97dd25-df64-4321-9b99-1d6c232b2bda'),
+    (2, 6, false, 'eca57c86-2a61-4e68-84b2-8978c876aad4', '2e8965d7-3a5d-4bc2-9833-4a4a0da0ef18'),
+    (1, 7, false, 'd6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', '2b79f559-ff81-4e16-9b89-499a61a98ef6'),
+    (2, 5, false, 'd6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', '48b5e0c2-92c3-4a43-8c6f-6c6a7b11a20c'),
+    (1, 6, false, '3f09de30-525f-4ad3-9b8a-fb7f8df515c8', 'c0c9875d-9a9a-4df3-ba3f-4d21e43e45fc'),
+    (2, 9, false, '3f09de30-525f-4ad3-9b8a-fb7f8df515c8', 'f33d3542-b5ff-4d0d-8485-b76e54bcf12b');

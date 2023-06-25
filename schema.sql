@@ -190,7 +190,7 @@ CREATE FUNCTION fnc_DeleteRooms()
 	RETURNS TRIGGER AS
 	$$
 	BEGIN
-    	DELETE FROM "Raum"
+    	DELETE FROM "Room"
     	WHERE "Station_ID" = OLD."Station_ID";
     	RETURN OLD;
 	END;
