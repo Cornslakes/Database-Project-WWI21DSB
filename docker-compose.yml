@@ -12,7 +12,9 @@ services:
             POSTGRES_DB: hospital
         volumes:
             - ./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
-            - ./database_populate.sql:/docker-entrypoint-initdb.d/2-data_populate.sql
+            - ./database_populate/database_populate_place.sql:/docker-entrypoint-initdb.d/2-data_populate_place.sql
+            - ./database_populate/database_populate_employee.sql:/docker-entrypoint-initdb.d/3-data_populate_employee.sql
+            - ./database_populate/database_populate.sql:/docker-entrypoint-initdb.d/4-data_populate.sql
 
     adminer:
         image: adminer
@@ -21,5 +23,3 @@ services:
             - 1234:8080
         depends_on:
             - "database"
-
-
