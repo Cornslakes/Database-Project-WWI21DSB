@@ -20,7 +20,6 @@ VALUES
   ('83b54769-03f9-49d5-9ccf-1e1593ae2428', 'Anderson', 'Robert', 'M', '1982-06-05');
 
 
-
 INSERT INTO public."Employee" ("Employee_ID", "Employee_Name", "Employee_Forename", "Employee_Birthdate", "Employee_Salary", "Employee_Role")
 VALUES 
   ('bfe9ad49-eb64-4656-a5fa-0e0247810db1', 'Phillips', 'Amy', '1995-04-13', '$3327.57', 'Nurse'),
@@ -28,3 +27,12 @@ VALUES
   ('7a528f9d-ba97-4166-90b6-1c354915e2c2', 'Williams', 'Tiffany', '1990-11-05', '$9064.13', 'Doctor'),
   ('71536415-6b83-4594-b899-19303fb378d8', 'Blackwell', 'Tammy', '1973-04-07', '$7418.58', 'Doctor'),
   ('5f1b5f6e-ea49-406f-a5ec-3e0a67068685', 'Sullivan', 'Kimberly', '1998-02-18', '$9465.67', 'Doctor');
+
+INSERT INTO public."Station" ("Station_ID", "Station_Name", "Station_Amount_of_rooms")
+VALUES 
+    ('43aebc23-7b9f-4f15-a652-4be9e13faa1f', 'Summerbreeze', 10),
+    ('9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', 'Springvale', 5),
+    ('eca57c86-2a61-4e68-84b2-8978c876aad4', 'Autumnwood', 8),
+    ('d6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', 'Winterhaven', 6),
+    ('1a2b3c4d-5e6f-7g8h-9i10-jk11l12m13n', 'Harmony Hills', 7);
+
