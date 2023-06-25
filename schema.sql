@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS public."Patient"
     "Patient_Sex" character,
     "Patient_Birthdate" date,
     "Room_ID" uuid,
-    "Adress_ID" uuid,
+    "Address_ID" uuid,
     PRIMARY KEY ("Patient_ID")
 );
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS public."Patient_Medicine"
 CREATE TABLE IF NOT EXISTS public."Address"
 (
     "Address_ID" uuid,
-    "Address_Street" character varying,
+    "Address_Street" text,
     "Address_HNr" character varying,
     "Place_ID" uuid,
     PRIMARY KEY ("Address_ID")
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS public."Address"
 CREATE TABLE IF NOT EXISTS public."Place"
 (
     "Place_ID" uuid,
-    "Place_Name" character varying,
+    "Place_Name" text,
     "Place_Postal_code" character(5),
     PRIMARY KEY ("Place_ID")
 );
@@ -116,7 +116,7 @@ ALTER TABLE IF EXISTS public."Medicine_Supplier"
 
 
 ALTER TABLE IF EXISTS public."Patient"
-    ADD FOREIGN KEY ("Adress_ID")
+    ADD FOREIGN KEY ("Address_ID")
     REFERENCES public."Address" ("Address_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION

@@ -38,7 +38,7 @@ VALUES
 
 INSERT INTO public."Room" ("Room_Nr", "Room_Size", "Room_isFull", "Station_ID", "Room_ID")
 VALUES 
-    (1, 10, false, '43aebc23-7b9f-4f15-a652-4be9e13faa1f', '0818ed14-5a2a-4e72-ae68-7ccf8932ef5d'),
+    (1, 10, false, '43aebc23-7b9f-4f15-a652-4be9e13faa1f',  '0818ed14-5a2a-4e72-ae68-7ccf8932ef5d'),
     (2, 8, false, '43aebc23-7b9f-4f15-a652-4be9e13faa1f', 'e6429ef2-137b-4dd9-bff3-34b2f9eac074'),
     (1, 5, false, '9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', '8d3a5273-62f4-4dcf-b7f2-7b417c9ce3e2'),
     (2, 7, false, '9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', '879a9650-180a-4d0b-9bc1-1d4809d8a9e7'),
