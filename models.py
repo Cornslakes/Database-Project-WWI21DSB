@@ -35,7 +35,7 @@ class Address(db.Model):
     Address_ID = db.Column(db.UUID, primary_key=True)
     Address_Street = db.Column(db.Text)
     Address_HNr = db.Column(db.String)
-    Place_Postal_Code = db.Column(db.Integer)
+    Place_Postal_Code = db.Column(db.Integer, db.ForeignKey("Place.Place_Postal_Code"))
 
 
 class Place(db.Model):
