@@ -221,6 +221,12 @@ def delete_medicine(id):
     return redirect("/medicine")
 
 
+# functionality for the cancel button in the Medicine order tab
+@app.route("/cancel_medicine_order")
+def cancel_medicine_order():
+    return redirect("/medicine")
+
+
 # -------Change Medicine-------
 class ChangeMedicineForm(FlaskForm):
     name = StringField(
@@ -277,6 +283,64 @@ def stock_minus_one(id):
     else:
         flash("Error: Minimum stock is 0")
     return redirect("/medicine")
+
+
+class RestockingMedicineForm(FlaskForm):
+    submit = SubmitField("Place Order")
+
+
+# -------restock medicine-------
+@app.route("/restock_medicine", methods=["GET", "POST"])
+def restock_medicine():
+    form = RestockingMedicineForm()
+    medicines = Medicine.query.all()
+
+    names = []
+    restocking_amounts = []
+    restocking_prices = []
+    companys = []
+    ids = []
+    total = 0
+    for medication in medicines:
+        name = medication.Medicine_Name
+        restock_amount = 10 - medication.Medicine_Amount
+        restocking_price = float(medication.Medicine_Pricing[1:]) * restock_amount
+        if restock_amount > 0:
+            ids.append(medication.Medicine_ID)
+            names.append(name)
+            restocking_amounts.append(restock_amount)
+            restocking_prices.append("$" + str(restocking_price))
+            companys.append("Company")
+            total += restocking_price
+    if total == 0:
+        flash("there is nothing to restock")
+        return redirect("/medicine")
+
+    if form.validate_on_submit():
+        for medicine in medicines:
+            medicine.Medicine_Amount = 10
+            db.session.commit()
+        restock_message = ""
+        for name in names:
+            restock_message += name + ", "
+        flash(
+            "Successfully restocked: "
+            + restock_message[:-2]
+            + " for a total of    "
+            + str(total)
+            + "$"
+        )
+        return redirect("/medicine")
+
+    return render_template(
+        "restock_medicine.html",
+        names=names,
+        amounts=restocking_amounts,
+        prices=restocking_prices,
+        companys=companys,
+        total="$" + str(total),
+        form=form,
+    )
 
 
 # ---------------------------------------------------------

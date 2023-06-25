@@ -26,7 +26,7 @@ VALUES
   ('2d3fe77f-f7bf-4578-bc92-749e14ff3379', 'Cross', 'Jeffery', '1991-09-07', '$3904.70', 'Nurse'),
   ('7a528f9d-ba97-4166-90b6-1c354915e2c2', 'Williams', 'Tiffany', '1990-11-05', '$9064.13', 'Doctor'),
   ('71536415-6b83-4594-b899-19303fb378d8', 'Blackwell', 'Tammy', '1973-04-07', '$7418.58', 'Doctor'),
-  ('5f1b5f6e-ea49-406f-a5ec-3e0a67068685', 'Sullivan', 'Kimberly', '1998-02-18', '$9465.67', 'Doctor')
+  ('5f1b5f6e-ea49-406f-a5ec-3e0a67068685', 'Sullivan', 'Kimberly', '1998-02-18', '$9465.67', 'Doctor'),
   ('73fdf819-60e5-4d9e-838d-b2d11a009f0c', 'Dunn', 'Danielle', '1960-10-10', '$3095.06', 'Nurse'),
   ('e2749763-a41c-43a8-b3ed-3a1c9f6e2d44', 'Gutierrez', 'Drew', '1996-07-06', '$4777.86', 'Nurse'),
   ('9e6a61a1-2a86-44e2-a57c-dd5329dbfe0b', 'Clark', 'Jeffrey', '1983-03-19', '$3313.46', 'Nurse'),
@@ -233,6 +233,4 @@ VALUES
     ('43aebc23-7b9f-4f15-a652-4be9e13faa1f', 'Summerbreeze', 10),
     ('9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', 'Springvale', 5),
     ('eca57c86-2a61-4e68-84b2-8978c876aad4', 'Autumnwood', 8),
-    ('d6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', 'Winterhaven', 6),
-    ('1a2b3c4d-5e6f-7g8h-9i10-jk11l12m13n', 'Harmony Hills', 7);
-
+    ('d6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', 'Winterhaven', 6);
