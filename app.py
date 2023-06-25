@@ -22,7 +22,7 @@ bootstrap = Bootstrap(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:123@localhost:5433/hospital"
 
 db = SQLAlchemy(app)
-from models import Medicine, Patient, Employee
+from models import Medicine, Patient, Employee, Address, Place
 
 
 @app.route("/", methods=["GET", "POST"])
