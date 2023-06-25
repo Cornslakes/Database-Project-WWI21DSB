@@ -24,20 +24,19 @@ class Patient(db.Model):
      Patient_Forename = db.Column(db.Text)
      Patient_Sex = db.Column(db.Text)
      Patient_Birthdate = db.Column(db.Date)
-     Patient_Address_ID = db.Column(db.UUID)
+     Address_ID = db.Column(db.UUID)
 
 class Address(db.Model):
       __tablename__ = 'Address'
       Address_ID = db.Column(db.UUID, primary_key = True)
       Address_Street = db.Column(db.Text)
       Address_HNr = db.Column(db.String)
-      Place_ID = db.Column(db.UUID)
+      Place_Postal_Code = db.Column(db.Integer, foreign_key= True)
 
 class Place(db.Model):
      __tablename__ = 'Place'
-     Place_ID = db.Column(db.UUID, primary_key = True)
-     Place_Name = db.Column(db.Text)
-     Place_Postal_code = db.Column(db.String)
+     Place_Postal_Code = db.Column(db.String, primary_key= True)
+     Place_Name = db.Column(db.Integer)
 
 class Employee(db.Model):
      __tablename__ = 'Employee'
