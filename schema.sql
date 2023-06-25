@@ -34,8 +34,7 @@ CREATE TABLE IF NOT EXISTS public."Patient"
     "Patient_Forename" text,
     "Patient_Sex" character,
     "Patient_Birthdate" date,
-    "Room_Nr" smallint,
-    "Station_Nr" smallint,
+    "Room_ID" uuid,
     "Adress_ID" uuid,
     PRIMARY KEY ("Patient_ID")
 );
@@ -78,16 +77,10 @@ CREATE TABLE IF NOT EXISTS public."Employee"
 
 CREATE TABLE IF NOT EXISTS public."Station"
 (
-    "Station_Nr" smallint,
+    "Station_ID" uuid,
     "Station_Name" text,
     "Station_Amount_of_rooms" smallint,
-    PRIMARY KEY ("Station_Nr")
-);
-
-CREATE TABLE IF NOT EXISTS public."Station_Employee"
-(
-    "Station_Station_Nr" smallint,
-    "Employee_Employee_ID" uuid
+    PRIMARY KEY ("Station_ID")
 );
 
 CREATE TABLE IF NOT EXISTS public."Room"
@@ -95,9 +88,15 @@ CREATE TABLE IF NOT EXISTS public."Room"
     "Room_Nr" smallint,
     "Room_Size" smallint,
     "Room_isFull" boolean,
-    "Station_Nr" smallint,
-    CONSTRAINT "PK_Room" PRIMARY KEY ("Room_Nr")
-        INCLUDE("Station_Nr")
+    "Station_ID" uuid,
+    "Room_ID" uuid,
+    PRIMARY KEY ("Room_ID")
+);
+
+CREATE TABLE IF NOT EXISTS public."Station_Employee"
+(
+    "Station_Station_ID" uuid,
+    "Employee_Employee_ID" uuid
 );
 
 ALTER TABLE IF EXISTS public."Medicine_Supplier"
@@ -125,8 +124,8 @@ ALTER TABLE IF EXISTS public."Patient"
 
 
 ALTER TABLE IF EXISTS public."Patient"
-    ADD FOREIGN KEY ("Room_Nr")
-    REFERENCES public."Room" ("Room_Nr") MATCH SIMPLE
+    ADD FOREIGN KEY ("Room_ID")
+    REFERENCES public."Room" ("Room_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -164,9 +163,17 @@ ALTER TABLE IF EXISTS public."Employee"
     NOT VALID;
 
 
+ALTER TABLE IF EXISTS public."Room"
+    ADD FOREIGN KEY ("Station_ID")
+    REFERENCES public."Station" ("Station_ID") MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
 ALTER TABLE IF EXISTS public."Station_Employee"
-    ADD FOREIGN KEY ("Station_Station_Nr")
-    REFERENCES public."Station" ("Station_Nr") MATCH SIMPLE
+    ADD FOREIGN KEY ("Station_Station_ID")
+    REFERENCES public."Station" ("Station_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -179,13 +186,20 @@ ALTER TABLE IF EXISTS public."Station_Employee"
     ON DELETE NO ACTION
     NOT VALID;
 
+CREATE FUNCTION fnc_DeleteRooms()
+	RETURNS TRIGGER AS
+	$$
+	BEGIN
+    	DELETE FROM "Raum"
+    	WHERE "Station_ID" = OLD."Station_ID";
+    	RETURN OLD;
+	END;
+	$$
+	LANGUAGE plpgsql;
 
-ALTER TABLE IF EXISTS public."Room"
-    ADD FOREIGN KEY ("Room_Nr")
-    REFERENCES public."Station" ("Station_Nr") MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
+CREATE TRIGGER trg_DeleteRooms
+	BEFORE DELETE ON "Station"
+	FOR EACH ROW
+	EXECUTE FUNCTION fnc_DeleteRooms();
 
 END;
-
