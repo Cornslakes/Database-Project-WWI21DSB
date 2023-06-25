@@ -248,9 +248,11 @@ def change_medicine(id):
     medicine = Medicine.query.filter_by(Medicine_ID=id).first()
 
     if form.validate_on_submit():
-        if form.name.data in [
-            medication.Medicine_Name for medication in Medicine.query.all()
-        ]:
+        if (
+            form.name.data
+            in [medication.Medicine_Name for medication in Medicine.query.all()]
+            and form.name.data != medicine.Medicine_Name
+        ):
             flash(
                 "Error: sorry it doenst work but the problem is that you know that the name you are trying to rename this this is already in stock no i meant that the name in in the table already exists, so it exists and that is why you cant create another if you doidnt understand that i dindt understand too, but just try it again with a different name. \n by the way, Did you know that the answer to life is 42?"
             )
