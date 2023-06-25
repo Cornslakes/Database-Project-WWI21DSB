@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS public."Patient"
     "Patient_Forename" text,
     "Patient_Sex" character,
     "Patient_Birthdate" date,
-    "Patient_Room_ID" uuid,
+    "Room_ID" uuid,
     "Address_ID" uuid,
     PRIMARY KEY ("Patient_ID")
 );
