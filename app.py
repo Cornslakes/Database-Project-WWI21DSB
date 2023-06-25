@@ -317,7 +317,7 @@ class EmployeeForm(FlaskForm):
         ("Doctor", "Doctor"),
         ("Nurse", "Nurse"),
     ]
-    role = SelectField("Sex", choices=choices, validators=[DataRequired()])
+    role = SelectField("Role", choices=choices, validators=[DataRequired()])
 
     submit = SubmitField("Submit")
 
@@ -388,7 +388,7 @@ class ChangeEmployeeForm(FlaskForm):
         ("Doctor", "Doctor"),
         ("Nurse", "Nurse"),
     ]
-    role = SelectField("Sex", choices=choices, validators=[DataRequired()])
+    role = SelectField("Role", choices=choices, validators=[DataRequired()])
 
     submit = SubmitField("Submit")
 
