@@ -1,4 +1,5 @@
 from flask import Flask, url_for, render_template, session, redirect, flash
+from sqlalchemy.orm import joinedload
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.form import _Auto
@@ -22,7 +23,7 @@ bootstrap = Bootstrap(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:123@localhost:5433/hospital"
 
 db = SQLAlchemy(app)
-from models import Medicine, Patient, Employee
+from models import Medicine, Patient, Employee, Address, Place
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -476,3 +477,21 @@ def change_employee(id):
         session["name"] = form.name.data
         return redirect("/staff")
     return render_template("change_employee.html", form=form, employee=employee)
+
+
+## ------------- OTHER --------------- ###
+
+
+@app.route("/check")
+def check():
+    patient = get_place_name("c7a5f5e0-9a84-4f48-90b7-6f6fe29e135a")
+    flash(str(patient))
+
+
+def get_place_name(patient_uuid):
+    patient = db.session.query(Patient).join(Address)
+
+    if patient:
+        return patient.place.Place_Name
+    else:
+        return None

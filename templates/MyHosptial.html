@@ -2,5 +2,8 @@
 title %}Company{% endblock %} {% block page_content %}
 <div class="page-header">
   <h1>{{title}}</h1>
+  <a href="{{ url_for('check') }}" title="check"
+    ><button type="button" class="btn btn-danger">check</button></a
+  >
 </div>
 {% endblock %}
