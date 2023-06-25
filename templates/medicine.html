@@ -25,18 +25,14 @@ title %}Company{% endblock %} {% block page_content %}
             title="Delete Patient"
             ><button type="button" class="btn btn-danger">x</button></a
           >
-        </td>
-        <td class="med_name">
           <a
             href="{{ url_for('change_medicine', id=medicine.Medicine_ID) }}"
             title="Change Patient Info"
             ><button type="button" class="btn btn-blue">✎</button></a
           >
-        </td>
-        <td class="med_name">
           <a
             href="{{ url_for('stock_minus_one', id=medicine.Medicine_ID) }}"
-            title="Change Patient Info"
+            title="Remove 1 item from stock"
             ><button type="button" class="btn btn-yellow">-1</button></a
           >
         </td>

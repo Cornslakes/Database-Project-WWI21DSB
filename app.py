@@ -133,7 +133,7 @@ class ChangePatientForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
-# Routing to the form that adds patients
+# Routing to the form that changes patients
 @app.route("/change_patient/<id>", methods=["GET", "POST"])
 def change_patient(id):
     form = ChangePatientForm()
@@ -241,7 +241,7 @@ class ChangeMedicineForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
-# Routing to the form that adds medicines
+# Routing to the form that changes medicines
 @app.route("/change_medicine/<id>", methods=["GET", "POST"])
 def change_medicine(id):
     form = ChangeMedicineForm()
@@ -262,7 +262,7 @@ def change_medicine(id):
             session["known"] = False
             session["name"] = form.name.data
         return redirect("/medicine")
-    return render_template("change_entity.html", form=form, medicine=medicine)
+    return render_template("change_medicine.html", form=form, medicine=medicine)
 
 
 # -------Stock -1-------
@@ -287,3 +287,126 @@ def employee_staff():
     title = "List of all staffed employees:"
     employee = Employee.query.order_by(Employee.Employee_Name.desc()).all()
     return render_template("employee.html", employee=employee)
+
+
+# -------Add Employee-------
+# defining the Form Entry fields for Employees
+class EmployeeForm(FlaskForm):
+    name = StringField(
+        "Name",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Employee Name"},
+    )
+    forename = StringField(
+        "Forename",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Employee Forename"},
+    )
+    birthdate = StringField(
+        "Birthdate",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "year-month-day"},
+    )
+    salary = StringField(
+        "Salary",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Amount in USD"},
+    )
+    # Define the choices for the dropdown menu
+    choices = [
+        ("Doctor", "Doctor"),
+        ("Nurse", "Nurse"),
+    ]
+    role = SelectField("Sex", choices=choices, validators=[DataRequired()])
+
+    submit = SubmitField("Submit")
+
+
+# Routing to the form that adds Employees
+@app.route("/add_employee", methods=["GET", "POST"])
+def add_employee():
+    form = EmployeeForm()
+    if form.validate_on_submit():
+        employee = Employee(
+            Employee_ID=uuid.uuid4(),
+            Employee_Name=form.name.data,
+            Employee_Forename=form.forename.data,
+            Employee_Birthdate=form.birthdate.data,
+            Employee_Salary=form.salary.data,
+            Employee_Role=form.role.data,
+        )
+        db.session.add(employee)
+        db.session.commit()
+        session["known"] = False
+        session["name"] = form.name.data
+        return redirect("/staff")
+    return render_template("add_entity.html", form=form)
+
+
+# -------Delete Employee-------
+# Routing to Delete functionality for Employees
+@app.route("/delete_employee/<id>")
+def delete_employee(id):
+    employee = Employee.query.filter_by(Employee_ID=id).first()
+    if patient:
+        msg_text = (
+            "Employee "
+            + employee.Employee_Name
+            + ", "
+            + employee.Employee_Forename
+            + "     successfully removed"
+        )
+        db.session.delete(employee)
+        db.session.commit()
+        flash(msg_text)
+    return redirect("/staff")
+
+
+class ChangeEmployeeForm(FlaskForm):
+    name = StringField(
+        "Name",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Employee Name"},
+    )
+    forename = StringField(
+        "Forename",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Employee Forename"},
+    )
+    birthdate = StringField(
+        "Birthdate",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "year-month-day"},
+    )
+    salary = StringField(
+        "Salary",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Amount in USD"},
+    )
+    # Define the choices for the dropdown menu
+    choices = [
+        ("Doctor", "Doctor"),
+        ("Nurse", "Nurse"),
+    ]
+    role = SelectField("Sex", choices=choices, validators=[DataRequired()])
+
+    submit = SubmitField("Submit")
+
+
+# Routing to the form that changes Employees
+@app.route("/change_employee/<id>", methods=["GET", "POST"])
+def change_employee(id):
+    form = ChangeEmployeeForm()
+    employee = Employee.query.filter_by(Employee_ID=id).first()
+
+    if form.validate_on_submit():
+        employee.Employee_Name = form.name.data
+        employee.Employee_Forename = form.forename.data
+        employee.Employee_Birthdate = form.birthdate.data
+        employee.Employee_Salary = form.salary.data
+        employee.Employee_Role = form.role.data
+        db.session.commit()
+        session["known"] = False
+        session["name"] = form.name.data
+        return redirect("/staff")
+    return render_template("change_employee.html", form=form, employee=employee)

@@ -27,15 +27,12 @@ title %}Company{% endblock %} {% block page_content %}
             title="Delete Patient"
             ><button type="button" class="btn btn-danger">X</button></a
           >
+          <a
+            href="{{ url_for('change_patient', id=patient.Patient_ID) }}"
+            title="Change Patient Info"
+            ><button type="button" class="btn btn-blue">✎</button></a
+          >
         </td>
-      </td>
-      <td class="med_name">
-        <a
-          href="{{ url_for('change_patient', id=patient.Patient_ID) }}"
-          title="Change Patient Info"
-          ><button type="button" class="btn btn-blue">✎</button></a
-        >
-      </td>
         {% endfor %}
       </tr>
     </tbody>
