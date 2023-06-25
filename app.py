@@ -60,8 +60,8 @@ class PatientForm(FlaskForm):
     )
     # Define the choices for the dropdown menu
     choices = [
-        ("m", "Male"),
-        ("f", "Female"),
+        ("M", "Male"),
+        ("F", "Female"),
     ]
     sex = SelectField("Sex", choices=choices, validators=[DataRequired()])
     birthdate = StringField(
@@ -104,6 +104,51 @@ def delete_patient(id):
         db.session.commit()
         flash(msg_text)
     return redirect("/patient")
+
+
+# -------Change Patient Info-------
+class ChangePatientForm(FlaskForm):
+    name = StringField(
+        "Name",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Patient Name"},
+    )
+    forename = StringField(
+        "Forename",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Patient Forename"},
+    )
+    # Define the choices for the dropdown menu
+    choices = [
+        ("M", "Male"),
+        ("F", "Female"),
+    ]
+    sex = SelectField("Sex", choices=choices, validators=[DataRequired()])
+    birthdate = StringField(
+        "Birthdate",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "year-month-day"},
+    )
+
+    submit = SubmitField("Submit")
+
+
+# Routing to the form that adds patients
+@app.route("/change_patient/<id>", methods=["GET", "POST"])
+def change_patient(id):
+    form = ChangePatientForm()
+    patient = Patient.query.filter_by(Patient_ID=id).first()
+
+    if form.validate_on_submit():
+        patient.Patient_Name = form.name.data
+        patient.Patient_Forename = form.forename.data
+        patient.Patient_Sex = form.sex.data
+        patient.Patient_Birthdate = form.birthdate.data
+        db.session.commit()
+        session["known"] = False
+        session["name"] = form.name.data
+        return redirect("/patient")
+    return render_template("change_patient.html", form=form, patient=patient)
 
 
 # ---------------------------------------------------------
@@ -231,9 +276,11 @@ def stock_minus_one(id):
         flash("Error: Minimum stock is 0")
     return redirect("/medicine")
 
+
 # ---------------------------------------------------------
 # ------------------Functionality Employee-----------------
 # ---------------------------------------------------------
+
 
 @app.route("/staff")
 def employee_staff():
