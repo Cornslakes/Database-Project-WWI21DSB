@@ -1,5 +1,5 @@
 from flask import Flask, url_for, render_template, session, redirect, flash
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.form import _Auto
@@ -41,8 +41,7 @@ def index():
 # Routing to Patients Table
 @app.route("/patient", methods=["GET", "POST"])
 def patient():
-    title = "List of patients:"
-    patient = Patient.query.order_by(Patient.Patient_Name.desc()).all()
+    patient = Patient.query.join(Address, Address.Address_ID == Patient.Address_ID).join(Place, Address.Place_Postal_Code == Place.Place_Postal_Code).add_columns(Patient.Patient_ID, Patient.Patient_Name, Patient.Patient_Forename, Patient.Patient_Sex, Patient.Patient_Birthdate, Address.Address_Street, Address.Address_HNr, Place.Place_Postal_Code, Place.Place_Name)
     return render_template("patient.html", patient=patient)
 
 
@@ -68,30 +67,53 @@ class PatientForm(FlaskForm):
     birthdate = StringField(
         "Birthdate",
         validators=[DataRequired()],
-        render_kw={"placeholder": "year-month-day"},
+        render_kw={"placeholder": "Year-Month-Day"},
     )
-
+    address = StringField(
+        "Address",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Address Street"},
+    )
+    housenumber = StringField(
+        "Housenumber",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Housenumber"},
+    )
+    postalcode = StringField(
+        "Postalcode",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Postalcode"},
+    )
     submit = SubmitField("Submit")
 
 
 # Routing to the form that adds patients
 @app.route("/add_patient", methods=["GET", "POST"])
 def add_patient():
+    title = "Insert new patient:"
     form = PatientForm()
     if form.validate_on_submit():
         patient = Patient(
-            Patient_ID=uuid.uuid4(),
+            Patient_ID= uuid.uuid4(),
             Patient_Name=form.name.data,
             Patient_Forename=form.forename.data,
             Patient_Sex=form.sex.data,
             Patient_Birthdate=form.birthdate.data,
         )
+        address = Address(
+            Address_ID = uuid.uuid4(),
+            Address_Street = form.address.data,
+            Address_HNr = form.housenumber.data,
+            Place_Postal_Code = form.postalcode.data,
+        )
+        patient.Address_ID = address.Address_ID
         db.session.add(patient)
+        db.session.add(address)
         db.session.commit()
         session["known"] = False
         session["name"] = form.name.data
         return redirect("/patient")
-    return render_template("add_entity.html", form=form)
+    return render_template("add_entity.html", form=form, title=title)
 
 
 # -------Delete Patient-------
@@ -100,7 +122,13 @@ def add_patient():
 def delete_patient(id):
     patient = Patient.query.filter_by(Patient_ID=id).first()
     if patient:
-        msg_text = "Patient %s successfully removed" % str(patient)
+        msg_text = (
+            "Patient "
+            + patient.Patient_Name
+            + ", "
+            + patient.Patient_Forename
+            + "     was successfully removed."
+        )
         db.session.delete(patient)
         db.session.commit()
         flash(msg_text)
@@ -109,12 +137,12 @@ def delete_patient(id):
 
 # -------Change Patient Info-------
 class ChangePatientForm(FlaskForm):
-    name = StringField(
+    Patient_Name = StringField(
         "Name",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Patient Name"},
+        render_kw={"placeholder": "Patient Name"}
     )
-    forename = StringField(
+    Patient_Forename = StringField(
         "Forename",
         validators=[DataRequired()],
         render_kw={"placeholder": "Patient Forename"},
@@ -124,8 +152,8 @@ class ChangePatientForm(FlaskForm):
         ("M", "Male"),
         ("F", "Female"),
     ]
-    sex = SelectField("Sex", choices=choices, validators=[DataRequired()])
-    birthdate = StringField(
+    Patient_Sex = SelectField("Sex", choices=choices, validators=[DataRequired()])
+    Patient_Birthdate = StringField(
         "Birthdate",
         validators=[DataRequired()],
         render_kw={"placeholder": "year-month-day"},
@@ -137,19 +165,20 @@ class ChangePatientForm(FlaskForm):
 # Routing to the form that changes patients
 @app.route("/change_patient/<id>", methods=["GET", "POST"])
 def change_patient(id):
-    form = ChangePatientForm()
+    title = "Change patient info:"
     patient = Patient.query.filter_by(Patient_ID=id).first()
+    form = ChangePatientForm(obj = patient)
 
     if form.validate_on_submit():
-        patient.Patient_Name = form.name.data
-        patient.Patient_Forename = form.forename.data
-        patient.Patient_Sex = form.sex.data
-        patient.Patient_Birthdate = form.birthdate.data
+        patient.Patient_Name = form.Patient_Name.data
+        patient.Patient_Forename = form.Patient_Forename.data
+        patient.Patient_Sex = form.Patient_Sex.data
+        patient.Patient_Birthdate = form.Patient_Birthdate.data
         db.session.commit()
         session["known"] = False
-        session["name"] = form.name.data
+        session["name"] = form.Patient_Name.data
         return redirect("/patient")
-    return render_template("change_patient.html", form=form, patient=patient)
+    return render_template("change_entity.html", form=form, title=title)
 
 
 # ---------------------------------------------------------
@@ -189,6 +218,7 @@ class MedicineForm(FlaskForm):
 # Routing to the form that adds medicines
 @app.route("/add_medicine", methods=["GET", "POST"])
 def add_medicine():
+    title = "Add new medicine:"
     form = MedicineForm()
     if form.validate_on_submit():
         medicine = Medicine.query.filter_by(Medicine_Name=form.name.data).first()
@@ -206,7 +236,7 @@ def add_medicine():
             session["known"] = True
         session["name"] = form.name.data
         return redirect("/medicine")
-    return render_template("add_entity.html", form=form)
+    return render_template("add_entity.html", form=form, title=title)
 
 
 # -------Delete Medicine-------
@@ -215,7 +245,7 @@ def add_medicine():
 def delete_medicine(id):
     medicine = Medicine.query.filter_by(Medicine_ID=id).first()
     if patient:
-        msg_text = "Medicine %s successfully removed" % str(medicine)
+        msg_text = "Medicine %s was successfully removed." % str(medicine.Medicine_Name)
         db.session.delete(medicine)
         db.session.commit()
         flash(msg_text)
@@ -230,17 +260,17 @@ def cancel_medicine_order():
 
 # -------Change Medicine-------
 class ChangeMedicineForm(FlaskForm):
-    name = StringField(
+    Medicine_Name = StringField(
         "Name",
         validators=[DataRequired()],
         render_kw={"placeholder": "Name"},
     )
-    price = StringField(
+    Medicine_Pricing = StringField(
         "Price",
         validators=[DataRequired()],
         render_kw={"placeholder": "Price"},
     )
-    amount = StringField(
+    Medicine_Amount = StringField(
         "Amount",
         validators=[DataRequired()],
         render_kw={"placeholder": "Stock"},
@@ -251,27 +281,28 @@ class ChangeMedicineForm(FlaskForm):
 # Routing to the form that changes medicines
 @app.route("/change_medicine/<id>", methods=["GET", "POST"])
 def change_medicine(id):
-    form = ChangeMedicineForm()
+    title = "Change medicine info:"
     medicine = Medicine.query.filter_by(Medicine_ID=id).first()
+    form = ChangeMedicineForm(obj = medicine)
 
     if form.validate_on_submit():
         if (
-            form.name.data
+            form.Medicine_Name.data
             in [medication.Medicine_Name for medication in Medicine.query.all()]
-            and form.name.data != medicine.Medicine_Name
+            and form.Medicine_Name.data != medicine.Medicine_Name
         ):
             flash(
                 "Error: sorry it doenst work but the problem is that you know that the name you are trying to rename this this is already in stock no i meant that the name in in the table already exists, so it exists and that is why you cant create another if you doidnt understand that i dindt understand too, but just try it again with a different name. \n by the way, Did you know that the answer to life is 42?"
             )
         else:
-            medicine.Medicine_Name = form.name.data
-            medicine.Medicine_Pricing = form.price.data
-            medicine.Medicine_Amount = form.amount.data
+            medicine.Medicine_Name = form.Medicine_Name.data
+            medicine.Medicine_Pricing = form.Medicine_Pricing.data
+            medicine.Medicine_Amount = form.Medicine_Amount.data
             db.session.commit()
             session["known"] = False
-            session["name"] = form.name.data
+            session["name"] = form.Medicine_Name.data
         return redirect("/medicine")
-    return render_template("change_medicine.html", form=form, medicine=medicine)
+    return render_template("change_entity.html", form=form, title=title)
 
 
 # -------Stock -1-------
@@ -351,8 +382,7 @@ def restock_medicine():
 
 @app.route("/staff")
 def employee_staff():
-    title = "List of all staffed employees:"
-    employee = Employee.query.order_by(Employee.Employee_Name.desc()).all()
+    employee = Employee.query.join(Address, Address.Address_ID == Employee.Address_ID).join(Place, Address.Place_Postal_Code == Place.Place_Postal_Code).add_columns(Employee.Employee_ID, Employee.Employee_Name, Employee.Employee_Forename, Employee.Employee_Birthdate, Employee.Employee_Salary, Employee.Employee_Role, Address.Address_Street, Address.Address_HNr, Place.Place_Postal_Code, Place.Place_Name)
     return render_template("employee.html", employee=employee)
 
 
@@ -384,7 +414,26 @@ class EmployeeForm(FlaskForm):
         ("Doctor", "Doctor"),
         ("Nurse", "Nurse"),
     ]
-    role = SelectField("Role", choices=choices, validators=[DataRequired()])
+    role = SelectField(
+        "Role",
+        choices=choices,
+          validators=[DataRequired()]
+    )
+    address = StringField(
+        "Address",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Address Street"},
+    )
+    housenumber = StringField(
+        "Housenumber",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Housenumber"},
+    )
+    postalcode = StringField(
+        "Postalcode",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Postalcode"},
+    )
 
     submit = SubmitField("Submit")
 
@@ -392,6 +441,7 @@ class EmployeeForm(FlaskForm):
 # Routing to the form that adds Employees
 @app.route("/add_employee", methods=["GET", "POST"])
 def add_employee():
+    title = "Add new medicine:"
     form = EmployeeForm()
     if form.validate_on_submit():
         employee = Employee(
@@ -402,12 +452,20 @@ def add_employee():
             Employee_Salary=form.salary.data,
             Employee_Role=form.role.data,
         )
+        address = Address(
+            Address_ID = uuid.uuid4(),
+            Address_Street = form.address.data,
+            Address_HNr = form.housenumber.data,
+            Place_Postal_Code = form.postalcode.data,
+        )
+        employee.Address_ID = address.Address_ID
         db.session.add(employee)
+        db.session.add(address)
         db.session.commit()
         session["known"] = False
         session["name"] = form.name.data
         return redirect("/staff")
-    return render_template("add_entity.html", form=form)
+    return render_template("add_entity.html", form=form, title=title)
 
 
 # -------Delete Employee-------
@@ -421,7 +479,7 @@ def delete_employee(id):
             + employee.Employee_Name
             + ", "
             + employee.Employee_Forename
-            + "     successfully removed"
+            + "     was successfully removed."
         )
         db.session.delete(employee)
         db.session.commit()
@@ -430,32 +488,32 @@ def delete_employee(id):
 
 
 class ChangeEmployeeForm(FlaskForm):
-    name = StringField(
+    Employee_Name = StringField(
         "Name",
         validators=[DataRequired()],
         render_kw={"placeholder": "Employee Name"},
     )
-    forename = StringField(
+    Employee_Forename = StringField(
         "Forename",
         validators=[DataRequired()],
         render_kw={"placeholder": "Employee Forename"},
     )
-    birthdate = StringField(
+    Employee_Birthdate = StringField(
         "Birthdate",
         validators=[DataRequired()],
-        render_kw={"placeholder": "year-month-day"},
+        render_kw={"placeholder": "Year-Month-Day"},
     )
-    salary = StringField(
-        "Salary",
+    Employee_Salary = StringField(
+        "Salary in USD",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Amount in USD"},
+        render_kw={"placeholder": " e.g. 8000.30"},
     )
     # Define the choices for the dropdown menu
     choices = [
         ("Doctor", "Doctor"),
         ("Nurse", "Nurse"),
     ]
-    role = SelectField("Role", choices=choices, validators=[DataRequired()])
+    Employee_Role = SelectField("Role", choices=choices, validators=[DataRequired()])
 
     submit = SubmitField("Submit")
 
@@ -463,35 +521,23 @@ class ChangeEmployeeForm(FlaskForm):
 # Routing to the form that changes Employees
 @app.route("/change_employee/<id>", methods=["GET", "POST"])
 def change_employee(id):
-    form = ChangeEmployeeForm()
+    title = "Change employee info:"
     employee = Employee.query.filter_by(Employee_ID=id).first()
+    form = ChangeEmployeeForm(obj=employee)
 
     if form.validate_on_submit():
-        employee.Employee_Name = form.name.data
-        employee.Employee_Forename = form.forename.data
-        employee.Employee_Birthdate = form.birthdate.data
-        employee.Employee_Salary = form.salary.data
-        employee.Employee_Role = form.role.data
+        employee.Employee_Name = form.Employee_Name.data
+        employee.Employee_Forename = form.Employee_Forename.data
+        employee.Employee_Birthdate = form.Employee_Birthdate.data
+        employee.Employee_Salary = form.Employee_Salary.data
+        employee.Employee_Role = form.Employee_Role.data
         db.session.commit()
         session["known"] = False
-        session["name"] = form.name.data
+        session["name"] = form.Employee_Name.data
         return redirect("/staff")
-    return render_template("change_employee.html", form=form, employee=employee)
+    return render_template("change_entity.html", form=form, title=title)
 
 
 ## ------------- OTHER --------------- ###
 
 
-@app.route("/check")
-def check():
-    patient = get_place_name("c7a5f5e0-9a84-4f48-90b7-6f6fe29e135a")
-    flash(str(patient))
-
-
-def get_place_name(patient_uuid):
-    patient = db.session.query(Patient).join(Address)
-
-    if patient:
-        return patient.place.Place_Name
-    else:
-        return None

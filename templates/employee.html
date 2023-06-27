@@ -2,7 +2,7 @@
 title %}Company{% endblock %} {% block page_content %}
 <div class="page-header">
   <h1>List of staffed employees:</h1>
-  <a href="/add_employee"><button class="btn btn-primary btn-lg rounded-pill shadow">
+  <a href="/add_employee"><button class="btn btn-primary btn-md rounded-pill shadow">
     Add new employee
   </button></a>
   <table class="table table-dark table-striped">
@@ -14,6 +14,10 @@ title %}Company{% endblock %} {% block page_content %}
         <th scope="col">Birthdate</th>
         <th scope="col">Salary</th>
         <th scope="col">Role</th>
+        <th scope="col">Address</th>
+        <th scope="col">HNr</th>
+        <th scope="col">Postal Code</th>
+        <th scope="col">City</th>
       </tr>
     </thead>
     <tbody>
@@ -25,16 +29,20 @@ title %}Company{% endblock %} {% block page_content %}
         <td class="med_name">{{employee.Employee_Birthdate}}</td>
         <td class="med_name">{{employee.Employee_Salary}}</td>
         <td class="med_name">{{employee.Employee_Role}}</td>
+        <td class="med_name">{{employee.Address_Street}}</td>
+        <td class="med_name">{{employee.Address_HNr}}</td>
+        <td class="med_name">{{employee.Place_Postal_Code}}</td>
+        <td class="med_name">{{employee.Place_Name}}</td>
         <td class="med_name">
           <a
             href="{{ url_for('delete_employee', id=employee.Employee_ID) }}"
-            onclick="return confirm('Do you want to permanently delete the medication: {{ employee.Employee_Name }}?');"
+            onclick="return confirm('Do you want to permanently delete following employee: {{ employee.Employee_Name }}?');"
             title="Delete Employee"
             ><button type="button" class="btn btn-danger">x</button></a
           >
           <a
             href="{{ url_for('change_employee', id=employee.Employee_ID) }}"
-            title="Change Patient Info"
+            title="Change Employee Info"
             ><button type="button" class="btn btn-blue">✎</button></a
           >
           {% endfor %}
