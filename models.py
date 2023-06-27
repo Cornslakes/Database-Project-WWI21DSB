@@ -4,6 +4,7 @@ from app import db
 from sqlalchemy.orm import relationship
 
 
+
 class Supplier(db.Model):
     __tablename__ = "Supplier"
     Supplier_ID = db.Column(db.UUID, primary_key=True)
@@ -27,7 +28,7 @@ class Patient(db.Model):
     Patient_Forename = db.Column(db.Text)
     Patient_Sex = db.Column(db.Text)
     Patient_Birthdate = db.Column(db.Date)
-    Address_ID = db.Column(db.UUID)
+    Address_ID = db.Column(db.UUID, db.ForeignKey("Address.Address_ID"))
 
 
 class Address(db.Model):
@@ -36,12 +37,14 @@ class Address(db.Model):
     Address_Street = db.Column(db.Text)
     Address_HNr = db.Column(db.String)
     Place_Postal_Code = db.Column(db.Integer, db.ForeignKey("Place.Place_Postal_Code"))
-
+    patient = relationship("Patient")
+    employee = relationship("Employee")
 
 class Place(db.Model):
     __tablename__ = "Place"
     Place_Postal_Code = db.Column(db.String, primary_key=True)
     Place_Name = db.Column(db.Integer)
+    address = relationship("Address")
 
 
 class Employee(db.Model):
@@ -52,3 +55,4 @@ class Employee(db.Model):
     Employee_Birthdate = db.Column(db.Date)
     Employee_Salary = db.Column(db.Integer)
     Employee_Role = db.Column(db.Text)
+    Address_ID = db.Column(db.UUID, db.ForeignKey("Address.Address_ID"))

@@ -1,0 +1,18 @@
+{% extends "bootstrap/base.html" %} {% import "bootstrap/wtf.html" as wtf %} {%
+    block title %}Company{% endblock %} {% block head %} {{ super() }} {% endblock
+    %} {% block content %}
+    <div class="container">
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+      </div>
+      {% endfor %} {% block page_content %}
+    
+      <h1>{{title}}</h1>
+    
+      <div class="col-md-4">{{ wtf.quick_form(form) }}</div>
+      {% endblock %}
+    </div>
+{% endblock %} {% block scripts %} {{ super() }} {% endblock %}
+    

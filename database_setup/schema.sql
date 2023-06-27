@@ -201,4 +201,19 @@ CREATE TRIGGER trg_DeleteRooms
 	FOR EACH ROW
 	EXECUTE FUNCTION fnc_DeleteRooms();
 
+CREATE VIEW patient_details AS
+    SELECT p."Patient_Name", p."Patient_Forename", p."Patient_Sex",
+           a."Address_Street", a."Address_HNr", a."Place_Postal_Code", pl."Place_Name"
+    FROM "Patient" p
+    JOIN "Address" a ON p."Address_ID" = a."Address_ID"
+    JOIN "Place" pl ON a."Place_Postal_Code" = pl."Place_Postal_Code";
+
+CREATE VIEW employee_details AS
+    SELECT e."Employee_Name", e."Employee_Forename", e."Employee_Role",
+           a."Address_Street", a."Address_HNr", a."Place_Postal_Code", pl."Place_Name"
+    FROM "Employee" e
+    JOIN "Address" a ON e."Address_ID" = a."Address_ID"
+    JOIN "Place" pl ON a."Place_Postal_Code" = pl."Place_Postal_Code";
+
+
 END;

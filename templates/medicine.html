@@ -3,12 +3,12 @@ title %}Company{% endblock %} {% block page_content %}
 <div class="page-header">
   <h1>Current stock of medicine:</h1>
   <a href="/add_medicine"
-    ><button class="btn btn-primary btn-lg rounded-pill shadow">
+    ><button class="btn btn-primary btn-md rounded-pill shadow">
       Add new Medicine
     </button></a
   >
   <a href="/restock_medicine"
-    ><button class="btn btn-primary btn-lg rounded-pill shadow">
+    ><button class="btn btn-primary btn-md rounded-pill shadow">
       Restock Medicine
     </button></a
   >
@@ -31,19 +31,19 @@ title %}Company{% endblock %} {% block page_content %}
         <td class="med_name">
           <a
             href="{{ url_for('delete_medicine', id=medicine.Medicine_ID) }}"
-            onclick="return confirm('Do you want to permanently delete the medication: {{ medicine.Medicine_Name }}?');"
-            title="Delete Patient"
+            onclick="return confirm('Do you want to permanently delete following medication: {{ medicine.Medicine_Name }}?');"
+            title="Delete Medicine"
             ><button type="button" class="btn btn-danger">x</button></a
           >
           <a
             href="{{ url_for('change_medicine', id=medicine.Medicine_ID) }}"
-            title="Change Patient Info"
-            ><button type="button" class="btn btn-blue">✎</button></a
+            title="Change Medicine Info"
+            ><button type="button" class="btn">✎</button></a
           >
           <a
             href="{{ url_for('stock_minus_one', id=medicine.Medicine_ID) }}"
             title="Remove 1 item from stock"
-            ><button type="button" class="btn btn-yellow">-1</button></a
+            ><button type="button" class="btn">-1</button></a
           >
         </td>
       </tr>

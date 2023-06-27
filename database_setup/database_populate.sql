@@ -17,7 +17,19 @@ VALUES
     ('3a5b11a3-dc6f-488e-8ebe-65a485b8777f', 'Sample Avenue', '5b', '10785'),
     ('e81f6f71-0137-446a-a3e1-77f42e123c14', 'Test Road', '7', '12047'),
     ('b7e59a9c-0f5f-4d1b-9a21-9b22c6c5291a', 'Demo Lane', '2', '14059'),
-    ('294d52f4-b212-4b8d-97c2-2e3fb15a36ae', 'Trial Boulevard', '12', '22083');
+    ('294d52f4-b212-4b8d-97c2-2e3fb15a36ae', 'Trial Boulevard', '12', '22083'),
+    ('a6e4b9f4-3a62-4eb4-9c16-51227ae137a1', 'Musterstraße 1', '1', '68161'),
+    ('37f7a3f7-1284-4a4b-9d47-0b8846e0a503', 'Beispielweg 2', '2', '68163'),
+    ('e48649f6-6109-47f5-a8e0-34469e957a51', 'Testgasse 3', '3', '68165'),
+    ('aae42bde-8d70-481a-9764-8e7e5f63a2e2', 'Hauptplatz 4', '4', '68167'),
+    ('d49bca7d-7e6c-4b3d-84f1-973b4f0a243c', 'Musterweg 5', '5', '68169'),
+    ('8f593146-4b17-4e7f-8901-6f5d7dc7d0d4', 'Beispielpfad 6', '6', '68199'),
+    ('deee2064-1a23-4f20-8dd5-28c86c715992', 'Testallee 7', '7', '68219'),
+    ('fbdf7b39-7e5b-4b94-864c-2f6bdfae309f', 'Am Markt 8', '8', '68219'),
+    ('8a5c7e6f-2a6a-4e7f-b234-8f170f5b6e24', 'Musterplatz 9', '9', '68161'),
+    ('a64bb754-4dbd-47f0-82b5-6e4b8eb12f47', 'Beispielstraße 10', '10', '68163');
+
+
 
 INSERT INTO public."Patient" ("Patient_ID", "Patient_Name", "Patient_Forename", "Patient_Sex", "Patient_Birthdate", "Address_ID")
 VALUES 
