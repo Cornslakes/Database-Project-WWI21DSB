@@ -122,7 +122,13 @@ def add_patient():
 def delete_patient(id):
     patient = Patient.query.filter_by(Patient_ID=id).first()
     if patient:
-        msg_text = "Patient %s successfully removed" % str(patient)
+        msg_text = (
+            "Patient "
+            + patient.Patient_Name
+            + ", "
+            + patient.Patient_Forename
+            + "     was successfully removed."
+        )
         db.session.delete(patient)
         db.session.commit()
         flash(msg_text)
@@ -239,7 +245,7 @@ def add_medicine():
 def delete_medicine(id):
     medicine = Medicine.query.filter_by(Medicine_ID=id).first()
     if patient:
-        msg_text = "Medicine %s successfully removed" % str(medicine)
+        msg_text = "Medicine %s was successfully removed." % str(medicine.Medicine_Name)
         db.session.delete(medicine)
         db.session.commit()
         flash(msg_text)
@@ -473,7 +479,7 @@ def delete_employee(id):
             + employee.Employee_Name
             + ", "
             + employee.Employee_Forename
-            + "     successfully removed"
+            + "     was successfully removed."
         )
         db.session.delete(employee)
         db.session.commit()
