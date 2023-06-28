@@ -1,12 +1,10 @@
 from flask import Flask, url_for, render_template, session, redirect, flash
-from sqlalchemy.orm import joinedload, sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.form import _Auto
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 from flask_bootstrap import Bootstrap
-import os
 import uuid
 
 
@@ -156,22 +154,22 @@ class ChangePatientForm(FlaskForm):
     Patient_Birthdate = StringField(
         "Birthdate",
         validators=[DataRequired()],
-        render_kw={"placeholder": "year-month-day"},
+        render_kw={"placeholder": "Year-Month-Day"},
     )
     Address_Street = StringField(
         "Address",
         validators=[DataRequired()],
-        render_kw={"placeholder": " e.g. 8000.30"},
+        render_kw={"placeholder": "Address Street"},
     )
     Address_HNr = StringField(
         "Housenumber",
         validators=[DataRequired()],
-        render_kw={"placeholder": " e.g. 8000.30"},
+        render_kw={"placeholder": "Housenumber"},
     )
     Place_Postal_Code = StringField(
         "Postal Code",
         validators=[DataRequired()],
-        render_kw={"placeholder": " e.g. 8000.30"},
+        render_kw={"placeholder": "Postal Code"},
     )
 
     submit = SubmitField("Submit")
@@ -294,7 +292,7 @@ class ChangeMedicineForm(FlaskForm):
     Medicine_Amount = StringField(
         "Amount",
         validators=[DataRequired()],
-        render_kw={"placeholder": "Stock"},
+        render_kw={"placeholder": "Amount"},
     )
     submit = SubmitField("Submit")
 
@@ -315,6 +313,9 @@ def change_medicine(id):
             flash(
                 "Error: sorry it doenst work but the problem is that you know that the name you are trying to rename this this is already in stock no i meant that the name in in the table already exists, so it exists and that is why you cant create another if you doidnt understand that i dindt understand too, but just try it again with a different name. \n by the way, Did you know that the answer to life is 42?"
             )
+        if (int(form.Medicine_Amount.data) <= 0 or int(form.Medicine_Amount.data) > 10):
+            msg_text = "Error: You entered an invalid amount of %s, please try again." % str(medicine.Medicine_Name)
+            flash(msg_text)
         else:
             medicine.Medicine_Name = form.Medicine_Name.data
             medicine.Medicine_Pricing = form.Medicine_Pricing.data
@@ -339,7 +340,7 @@ def stock_minus_one(id):
 
 
 class RestockingMedicineForm(FlaskForm):
-    submit = SubmitField("Place Order")
+    submit = SubmitField("Place order")
 
 
 # -------restock medicine-------
@@ -347,7 +348,6 @@ class RestockingMedicineForm(FlaskForm):
 def restock_medicine():
     form = RestockingMedicineForm()
     medicines = Medicine.query.all()
-
     names = []
     restocking_amounts = []
     restocking_prices = []
@@ -363,10 +363,9 @@ def restock_medicine():
             names.append(name)
             restocking_amounts.append(restock_amount)
             restocking_prices.append("$" + str(restocking_price))
-            companys.append("Company")
             total += restocking_price
     if total == 0:
-        flash("there is nothing to restock")
+        flash("Error: There is nothing to restock.")
         return redirect("/medicine")
 
     if form.validate_on_submit():
@@ -423,7 +422,7 @@ class EmployeeForm(FlaskForm):
     birthdate = StringField(
         "Birthdate",
         validators=[DataRequired()],
-        render_kw={"placeholder": "year-month-day"},
+        render_kw={"placeholder": "Year-Month-Day"},
     )
     salary = StringField(
         "Salary",
@@ -542,17 +541,17 @@ class ChangeEmployeeForm(FlaskForm):
     Address_Street = StringField(
         "Address",
         validators=[DataRequired()],
-        render_kw={"placeholder": " e.g. 8000.30"},
+        render_kw={"placeholder": "Address Street"},
     )
     Address_HNr = StringField(
         "Housenumber",
         validators=[DataRequired()],
-        render_kw={"placeholder": " e.g. 8000.30"},
+        render_kw={"placeholder": "Housenumber"},
     )
     Place_Postal_Code = StringField(
         "Postal Code",
         validators=[DataRequired()],
-        render_kw={"placeholder": " e.g. 8000.30"},
+        render_kw={"placeholder": "Postal Code"},
     )
 
     submit = SubmitField("Submit")
