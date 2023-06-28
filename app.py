@@ -41,7 +41,7 @@ def index():
 # Routing to Patients Table
 @app.route("/patient", methods=["GET", "POST"])
 def patient():
-    patient = Patient.query.join(Address, Address.Address_ID == Patient.Address_ID).join(Place, Address.Place_Postal_Code == Place.Place_Postal_Code).add_columns(Patient.Patient_ID, Patient.Patient_Name, Patient.Patient_Forename, Patient.Patient_Sex, Patient.Patient_Birthdate, Address.Address_Street, Address.Address_HNr, Place.Place_Postal_Code, Place.Place_Name)
+    patient = Patient.query.join(Address, Address.Address_ID == Patient.Address_ID).join(Place, Address.Place_Postal_Code == Place.Place_Postal_Code).add_columns(Patient.Patient_ID, Patient.Patient_Name, Patient.Patient_Forename, Patient.Patient_Sex, Patient.Patient_Age, Patient.Patient_Birthdate, Address.Address_Street, Address.Address_HNr, Place.Place_Postal_Code, Place.Place_Name)
     return render_template("patient.html", patient=patient)
 
 
@@ -158,6 +158,21 @@ class ChangePatientForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": "year-month-day"},
     )
+    Address_Street = StringField(
+        "Address",
+        validators=[DataRequired()],
+        render_kw={"placeholder": " e.g. 8000.30"},
+    )
+    Address_HNr = StringField(
+        "Housenumber",
+        validators=[DataRequired()],
+        render_kw={"placeholder": " e.g. 8000.30"},
+    )
+    Place_Postal_Code = StringField(
+        "Postal Code",
+        validators=[DataRequired()],
+        render_kw={"placeholder": " e.g. 8000.30"},
+    )
 
     submit = SubmitField("Submit")
 
@@ -166,14 +181,20 @@ class ChangePatientForm(FlaskForm):
 @app.route("/change_patient/<id>", methods=["GET", "POST"])
 def change_patient(id):
     title = "Change patient info:"
+    patientdetails = Patient.query.filter_by(Patient_ID=id).join(Address, Address.Address_ID == Patient.Address_ID).join(Place, Address.Place_Postal_Code == Place.Place_Postal_Code).add_columns(Patient.Patient_ID, Patient.Patient_Name, Patient.Patient_Forename, Patient.Patient_Sex, Patient.Patient_Birthdate, Address.Address_Street, Address.Address_HNr, Place.Place_Postal_Code).first()
+    addressid = Patient.query.filter_by(Patient_ID=id).add_columns(Patient.Address_ID).first()
     patient = Patient.query.filter_by(Patient_ID=id).first()
-    form = ChangePatientForm(obj = patient)
+    address = Address.query.filter_by(Address_ID = addressid.Address_ID).first()
+    form = ChangePatientForm(obj=patientdetails)
 
     if form.validate_on_submit():
-        patient.Patient_Name = form.Patient_Name.data
-        patient.Patient_Forename = form.Patient_Forename.data
-        patient.Patient_Sex = form.Patient_Sex.data
-        patient.Patient_Birthdate = form.Patient_Birthdate.data
+        patient.Patient_Name=form.Patient_Name.data
+        patient.Patient_Forename=form.Patient_Forename.data
+        patient.Patient_Sex=form.Patient_Sex.data
+        patient.Patient_Birthdate=form.Patient_Birthdate.data
+        address.Address_Street = form.Address_Street.data
+        address.Address_HNr = form.Address_HNr.data
+        address.Place_Postal_Code = form.Place_Postal_Code.data
         db.session.commit()
         session["known"] = False
         session["name"] = form.Patient_Name.data
@@ -513,7 +534,26 @@ class ChangeEmployeeForm(FlaskForm):
         ("Doctor", "Doctor"),
         ("Nurse", "Nurse"),
     ]
-    Employee_Role = SelectField("Role", choices=choices, validators=[DataRequired()])
+    Employee_Role = SelectField(
+        "Role", 
+        choices=choices, 
+        validators=[DataRequired()]
+    )
+    Address_Street = StringField(
+        "Address",
+        validators=[DataRequired()],
+        render_kw={"placeholder": " e.g. 8000.30"},
+    )
+    Address_HNr = StringField(
+        "Housenumber",
+        validators=[DataRequired()],
+        render_kw={"placeholder": " e.g. 8000.30"},
+    )
+    Place_Postal_Code = StringField(
+        "Postal Code",
+        validators=[DataRequired()],
+        render_kw={"placeholder": " e.g. 8000.30"},
+    )
 
     submit = SubmitField("Submit")
 
@@ -522,15 +562,21 @@ class ChangeEmployeeForm(FlaskForm):
 @app.route("/change_employee/<id>", methods=["GET", "POST"])
 def change_employee(id):
     title = "Change employee info:"
+    employeedetails = Employee.query.filter_by(Employee_ID=id).join(Address, Address.Address_ID == Employee.Address_ID).join(Place, Address.Place_Postal_Code == Place.Place_Postal_Code).add_columns(Employee.Employee_ID, Employee.Employee_Name, Employee.Employee_Forename, Employee.Employee_Birthdate, Employee.Employee_Salary, Employee.Employee_Role, Address.Address_Street, Address.Address_HNr, Place.Place_Postal_Code).first()
+    addressid = Employee.query.filter_by(Employee_ID=id).add_columns(Employee.Address_ID).first()
     employee = Employee.query.filter_by(Employee_ID=id).first()
-    form = ChangeEmployeeForm(obj=employee)
+    address = Address.query.filter_by(Address_ID = addressid.Address_ID).first()
+    form = ChangeEmployeeForm(obj=employeedetails)
 
     if form.validate_on_submit():
-        employee.Employee_Name = form.Employee_Name.data
-        employee.Employee_Forename = form.Employee_Forename.data
-        employee.Employee_Birthdate = form.Employee_Birthdate.data
-        employee.Employee_Salary = form.Employee_Salary.data
-        employee.Employee_Role = form.Employee_Role.data
+        employee.Employee_Name=form.Employee_Name.data
+        employee.Employee_Forename=form.Employee_Forename.data
+        employee.Employee_Birthdate=form.Employee_Birthdate.data
+        employee.Employee_Salary=form.Employee_Salary.data
+        employee.Employee_Role=form.Employee_Role.data
+        address.Address_Street = form.Address_Street.data
+        address.Address_HNr = form.Address_HNr.data
+        address.Place_Postal_Code = form.Place_Postal_Code.data
         db.session.commit()
         session["known"] = False
         session["name"] = form.Employee_Name.data

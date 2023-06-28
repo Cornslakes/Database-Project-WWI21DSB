@@ -27,6 +27,7 @@ class Patient(db.Model):
     Patient_Name = db.Column(db.Text)
     Patient_Forename = db.Column(db.Text)
     Patient_Sex = db.Column(db.Text)
+    Patient_Age = db.Column(db.Integer)
     Patient_Birthdate = db.Column(db.Date)
     Address_ID = db.Column(db.UUID, db.ForeignKey("Address.Address_ID"))
 

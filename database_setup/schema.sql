@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS public."Patient"
     "Patient_Name" text,
     "Patient_Forename" text,
     "Patient_Sex" character,
+    "Patient_Age" smallint,
     "Patient_Birthdate" date,
     "Room_ID" uuid,
     "Address_ID" uuid,
@@ -196,13 +197,55 @@ CREATE FUNCTION fnc_DeleteRooms()
 	$$
 	LANGUAGE plpgsql;
 
+CREATE FUNCTION calculate_age()
+    RETURNS TRIGGER AS 
+    $$
+    BEGIN
+        NEW."Patient_Age" := EXTRACT(YEAR FROM age(NEW."Patient_Birthdate"));
+        RETURN NEW;
+    END;
+    $$ 
+    LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_room_isfull()
+    RETURNS TRIGGER AS 
+    $$
+    DECLARE
+        room_count INTEGER;
+    BEGIN
+        SELECT COUNT(*) INTO room_count
+        FROM "Room"
+        WHERE "Station_ID" = NEW."Station_ID" AND "Room_isFull" = true;
+
+        IF NEW."Room_Size" <= room_count THEN
+            NEW."Room_isFull" := true;
+        ELSE
+            NEW."Room_isFull" := false;
+        END IF;
+
+        RETURN NEW;
+    END;
+    $$ 
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER update_room_isfull_trigger
+    BEFORE INSERT OR UPDATE ON "Room"
+    FOR EACH ROW
+    EXECUTE FUNCTION update_room_isfull();
+
 CREATE TRIGGER trg_DeleteRooms
 	BEFORE DELETE ON "Station"
 	FOR EACH ROW
 	EXECUTE FUNCTION fnc_DeleteRooms();
 
+CREATE TRIGGER update_age_trigger
+    BEFORE INSERT OR UPDATE ON "Patient"
+    FOR EACH ROW
+    EXECUTE FUNCTION calculate_age();
+
+
 CREATE VIEW patient_details AS
-    SELECT p."Patient_Name", p."Patient_Forename", p."Patient_Sex",
+    SELECT p."Patient_Name", p."Patient_Forename", p."Patient_Sex", p."Patient_Age",
            a."Address_Street", a."Address_HNr", a."Place_Postal_Code", pl."Place_Name"
     FROM "Patient" p
     JOIN "Address" a ON p."Address_ID" = a."Address_ID"

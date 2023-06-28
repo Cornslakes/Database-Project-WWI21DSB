@@ -18,16 +18,16 @@ VALUES
     ('e81f6f71-0137-446a-a3e1-77f42e123c14', 'Test Road', '7', '12047'),
     ('b7e59a9c-0f5f-4d1b-9a21-9b22c6c5291a', 'Demo Lane', '2', '14059'),
     ('294d52f4-b212-4b8d-97c2-2e3fb15a36ae', 'Trial Boulevard', '12', '22083'),
-    ('a6e4b9f4-3a62-4eb4-9c16-51227ae137a1', 'Musterstraße 1', '1', '68161'),
-    ('37f7a3f7-1284-4a4b-9d47-0b8846e0a503', 'Beispielweg 2', '2', '68163'),
-    ('e48649f6-6109-47f5-a8e0-34469e957a51', 'Testgasse 3', '3', '68165'),
-    ('aae42bde-8d70-481a-9764-8e7e5f63a2e2', 'Hauptplatz 4', '4', '68167'),
-    ('d49bca7d-7e6c-4b3d-84f1-973b4f0a243c', 'Musterweg 5', '5', '68169'),
-    ('8f593146-4b17-4e7f-8901-6f5d7dc7d0d4', 'Beispielpfad 6', '6', '68199'),
-    ('deee2064-1a23-4f20-8dd5-28c86c715992', 'Testallee 7', '7', '68219'),
-    ('fbdf7b39-7e5b-4b94-864c-2f6bdfae309f', 'Am Markt 8', '8', '68219'),
-    ('8a5c7e6f-2a6a-4e7f-b234-8f170f5b6e24', 'Musterplatz 9', '9', '68161'),
-    ('a64bb754-4dbd-47f0-82b5-6e4b8eb12f47', 'Beispielstraße 10', '10', '68163');
+    ('a6e4b9f4-3a62-4eb4-9c16-51227ae137a1', 'Musterstraße', '1', '68161'),
+    ('37f7a3f7-1284-4a4b-9d47-0b8846e0a503', 'Beispielweg', '2', '68163'),
+    ('e48649f6-6109-47f5-a8e0-34469e957a51', 'Testgasse', '3', '68165'),
+    ('aae42bde-8d70-481a-9764-8e7e5f63a2e2', 'Hauptplatz', '4', '68167'),
+    ('d49bca7d-7e6c-4b3d-84f1-973b4f0a243c', 'Musterweg', '5', '68169'),
+    ('8f593146-4b17-4e7f-8901-6f5d7dc7d0d4', 'Beispielpfad', '6', '68199'),
+    ('deee2064-1a23-4f20-8dd5-28c86c715992', 'Testallee', '7', '68219'),
+    ('fbdf7b39-7e5b-4b94-864c-2f6bdfae309f', 'Am Markt', '8', '68219'),
+    ('8a5c7e6f-2a6a-4e7f-b234-8f170f5b6e24', 'Musterplatz', '9', '68161'),
+    ('a64bb754-4dbd-47f0-82b5-6e4b8eb12f47', 'Beispielstraße', '10', '68163');
 
 
 
@@ -38,24 +38,3 @@ VALUES
   ('d57b2a6d-7da9-44c6-a2c1-59811b77b1d3', 'Johnson', 'Michael', 'M', '1978-08-22', 'e81f6f71-0137-446a-a3e1-77f42e123c14'),
   ('f3a70776-574b-4399-93f2-52b036e78a2a', 'Williams', 'Emily', 'F', '1995-11-10', 'b7e59a9c-0f5f-4d1b-9a21-9b22c6c5291a'),
   ('83b54769-03f9-49d5-9ccf-1e1593ae2428', 'Anderson', 'Robert', 'M', '1982-06-05', '294d52f4-b212-4b8d-97c2-2e3fb15a36ae');
-
-INSERT INTO public."Station" ("Station_ID", "Station_Name", "Station_Amount_of_rooms")
-VALUES 
-    ('43aebc23-7b9f-4f15-a652-4be9e13faa1f', 'Summerbreeze', 10),
-    ('9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', 'Springvale', 5),
-    ('eca57c86-2a61-4e68-84b2-8978c876aad4', 'Autumnwood', 8),
-    ('d6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', 'Winterhaven', 6),
-    ('3f09de30-525f-4ad3-9b8a-fb7f8df515c8', 'Harmony Hills', 7);
-
-INSERT INTO public."Room" ("Room_Nr", "Room_Size", "Room_isFull", "Station_ID", "Room_ID")
-VALUES 
-    (1, 10, false, '43aebc23-7b9f-4f15-a652-4be9e13faa1f',  '0818ed14-5a2a-4e72-ae68-7ccf8932ef5d'),
-    (2, 8, false, '43aebc23-7b9f-4f15-a652-4be9e13faa1f', 'e6429ef2-137b-4dd9-bff3-34b2f9eac074'),
-    (1, 5, false, '9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', '8d3a5273-62f4-4dcf-b7f2-7b417c9ce3e2'),
-    (2, 7, false, '9f9ad0c7-09d8-45fb-b293-1e4b1c8c59d5', '879a9650-180a-4d0b-9bc1-1d4809d8a9e7'),
-    (1, 8, false, 'eca57c86-2a61-4e68-84b2-8978c876aad4', '4e97dd25-df64-4321-9b99-1d6c232b2bda'),
-    (2, 6, false, 'eca57c86-2a61-4e68-84b2-8978c876aad4', '2e8965d7-3a5d-4bc2-9833-4a4a0da0ef18'),
-    (1, 7, false, 'd6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', '2b79f559-ff81-4e16-9b89-499a61a98ef6'),
-    (2, 5, false, 'd6e9c3fa-bd9e-4f7d-aac5-968a2c8e0f01', '48b5e0c2-92c3-4a43-8c6f-6c6a7b11a20c'),
-    (1, 6, false, '3f09de30-525f-4ad3-9b8a-fb7f8df515c8', 'c0c9875d-9a9a-4df3-ba3f-4d21e43e45fc'),
-    (2, 9, false, '3f09de30-525f-4ad3-9b8a-fb7f8df515c8', 'f33d3542-b5ff-4d0d-8485-b76e54bcf12b');
