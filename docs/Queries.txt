@@ -1,0 +1,118 @@
+1.
+SELECT
+    public."Medicine"."Medicine_Name",
+    public."Supplier"."Supplier_Name"
+FROM
+    public."Medicine"
+JOIN
+    public."Medicine_Supplier" ON public."Medicine"."Medicine_ID" = public."Medicine_Supplier"."Medicine_Medicine_ID"
+JOIN
+    public."Supplier" ON public."Medicine_Supplier"."Supplier_Supplier_ID" = public."Supplier"."Supplier_ID";
+
+--> displays which medicine gets delivered by which supplier
+
+-------------------------------------------------------------------------------------------------------------------------
+2.
+SELECT 
+    public."Patient"."Patient_ID",
+    public."Patient"."Patient_Name",
+    public."Patient"."Patient_Age",
+    SUM(public."Medicine"."Medicine_Pricing" * public."Patient_Medicine"."Patient_Medicine_Amount") AS "Total_Medication_Cost"
+FROM 
+    public."Patient"
+JOIN 
+    public."Patient_Medicine" ON public."Patient"."Patient_ID" = public."Patient_Medicine"."Patient_Patient_ID"
+JOIN 
+    public."Medicine" ON public."Patient_Medicine"."Medicine_Medicine_ID" = public."Medicine"."Medicine_ID"
+GROUP BY 
+    public."Patient"."Patient_ID", public."Patient"."Patient_Name", public."Patient"."Patient_Age"
+ORDER BY 
+    "Total_Medication_Cost" DESC;
+
+--> calculates the total medication cost for each patient and orders them based on total cost
+
+-------------------------------------------------------------------------------------------------------------------------
+3.
+SELECT
+    public."Station"."Station_Name",
+    COUNT(public."Patient"."Patient_ID") AS "Number_of_Patients"
+FROM
+    public."Station"
+JOIN
+    public."Room" ON public."Station"."Station_ID" = public."Room"."Station_ID"
+JOIN
+    public."Patient" ON public."Room"."Room_ID" = public."Patient"."Room_ID"
+GROUP BY
+    public."Station"."Station_Name";
+
+--> gives the total number of patient per station
+
+-------------------------------------------------------------------------------------------------------------------------
+4.
+SELECT 
+    "Employee"."Employee_Name",
+    "Employee"."Employee_Forename",
+    "Employee"."Employee_Role",
+    "Address"."Address_Street",
+    "Address"."Address_HNr",
+    "Address"."Place_Postal_Code",
+    "Place"."Place_Name"
+FROM 
+    "Employee"
+JOIN 
+    "Address" ON "Employee"."Address_ID" = "Address"."Address_ID"
+JOIN 
+    "Place" ON "Address"."Place_Postal_Code" = "Place"."Place_Postal_Code";
+
+--> gives all relevant information for every employee
+
+-------------------------------------------------------------------------------------------------------------------------
+5.
+SELECT 
+    "Patient"."Patient_Name",
+    "Patient"."Patient_Forename",
+    "Patient"."Patient_Sex",
+    "Patient"."Patient_Age",
+    "Address"."Address_Street",
+    "Address"."Address_HNr",
+    "Address"."Place_Postal_Code",
+    "Place"."Place_Name"
+FROM 
+    "Patient"
+JOIN 
+    "Address" ON "Patient"."Address_ID" = "Address"."Address_ID"
+JOIN 
+    "Place" ON "Address"."Place_Postal_Code" = "Place"."Place_Postal_Code";
+
+--> gives all relevant information for all patients
+
+-------------------------------------------------------------------------------------------------------------------------
+6.
+SELECT
+    "Station"."Station_Name",
+    COUNT("Employee"."Employee_ID") AS "Number_of_Employees"
+FROM
+    "Station"
+JOIN
+    "Station_Employee" ON "Station"."Station_ID" = "Station_Employee"."Station_Station_ID"
+JOIN
+    "Employee" ON "Station_Employee"."Employee_Employee_ID" = "Employee"."Employee_ID"
+GROUP BY
+    "Station"."Station_Name";
+
+--> gives all employees per station
+
+-------------------------------------------------------------------------------------------------------------------------
+7.
+SELECT
+    "Employee_Role",
+    CEIL(AVG("Employee_Salary"::numeric)) AS "Average_Salary",
+    CEIL(AVG(EXTRACT(YEAR FROM age(current_date, "Employee_Birthdate")))) AS "Average_Age"
+FROM
+    public."Employee"
+GROUP BY
+    "Employee_Role";
+
+--> displays the average salary and average age per role
+
+

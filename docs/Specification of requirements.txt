@@ -1,0 +1,26 @@
+The hospital database is designed to keep track of patients, employees, medicine stocks, suppliers, rooms and stations.
+
+- Every patient and employee has an address which consists of a street, housenumber, postal code and place name. (due to a hospital having mostly local patients and employees place and address are seperate entities to safe space)
+
+- Each patient has a name, forename, birthdate, sex and an age.
+
+- Each employee has a name, forename, birthdate, salary and role.
+
+- Each medicine has a name, pricing and an amount which is capped at 10 pieces and cant go below 0.
+
+- Each supplier has a name, mail and telephone number.
+
+- To keep track of who provides which medicine every medicine has one unique supplier.
+
+- Every patient is linked to which medicine he gets.
+
+- Each station has a name and an amount of rooms.
+
+- Each room has a room number, room size (4 would mean, 4 patient could lay in that room) and an indicator if the room is full or not.
+
+- Each entity has a unique ID to indentify them.
+
+Our business function provides the option to derive a bill from missing medicine and fill it up again.
+
+
+
