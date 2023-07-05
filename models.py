@@ -4,7 +4,7 @@ from app import db
 from sqlalchemy.orm import relationship
 
 
-
+# Definition of all relevant entities
 class Supplier(db.Model):
     __tablename__ = "Supplier"
     Supplier_ID = db.Column(db.UUID, primary_key=True)
@@ -19,7 +19,7 @@ class Medicine(db.Model):
     Medicine_Name = db.Column(db.String)
     Medicine_Pricing = db.Column(db.String)
     Medicine_Amount = db.Column(db.Integer)
-
+    
 
 class Patient(db.Model):
     __tablename__ = "Patient"

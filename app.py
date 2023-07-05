@@ -23,10 +23,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:123@localhost:5433/h
 db = SQLAlchemy(app)
 from models import Medicine, Patient, Employee, Address, Place
 
-
+# Routing to Home page
 @app.route("/", methods=["GET", "POST"])
 def index():
-    title = "great things comming soon"
+    title = "Welcome to your personal MyHospital - DBMS Service"
     return render_template("MyHosptial.html", title=title)
 
 
@@ -56,12 +56,15 @@ class PatientForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": "Patient Forename"},
     )
-    # Define the choices for the dropdown menu
     choices = [
         ("M", "Male"),
         ("F", "Female"),
     ]
-    sex = SelectField("Sex", choices=choices, validators=[DataRequired()])
+    sex = SelectField(
+        "Sex", 
+        choices=choices, 
+        validators=[DataRequired()],
+    )
     birthdate = StringField(
         "Birthdate",
         validators=[DataRequired()],
@@ -145,12 +148,15 @@ class ChangePatientForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": "Patient Forename"},
     )
-    # Define the choices for the dropdown menu
     choices = [
         ("M", "Male"),
         ("F", "Female"),
     ]
-    Patient_Sex = SelectField("Sex", choices=choices, validators=[DataRequired()])
+    Patient_Sex = SelectField(
+        "Sex", 
+        choices=choices, 
+        validators=[DataRequired()],
+    )
     Patient_Birthdate = StringField(
         "Birthdate",
         validators=[DataRequired()],
@@ -179,6 +185,7 @@ class ChangePatientForm(FlaskForm):
 @app.route("/change_patient/<id>", methods=["GET", "POST"])
 def change_patient(id):
     title = "Change patient info:"
+    # Query for retrieving all relevant patient info
     patientdetails = Patient.query.filter_by(Patient_ID=id).join(Address, Address.Address_ID == Patient.Address_ID).join(Place, Address.Place_Postal_Code == Place.Place_Postal_Code).add_columns(Patient.Patient_ID, Patient.Patient_Name, Patient.Patient_Forename, Patient.Patient_Sex, Patient.Patient_Birthdate, Address.Address_Street, Address.Address_HNr, Place.Place_Postal_Code).first()
     addressid = Patient.query.filter_by(Patient_ID=id).add_columns(Patient.Address_ID).first()
     patient = Patient.query.filter_by(Patient_ID=id).first()
@@ -271,7 +278,7 @@ def delete_medicine(id):
     return redirect("/medicine")
 
 
-# functionality for the cancel button in the Medicine order tab
+# Functionality for the cancel button in the Medicine order tab
 @app.route("/cancel_medicine_order")
 def cancel_medicine_order():
     return redirect("/medicine")
@@ -313,7 +320,7 @@ def change_medicine(id):
             flash(
                 "Error: sorry it doenst work but the problem is that you know that the name you are trying to rename this this is already in stock no i meant that the name in in the table already exists, so it exists and that is why you cant create another if you doidnt understand that i dindt understand too, but just try it again with a different name. \n by the way, Did you know that the answer to life is 42?"
             )
-        if (int(form.Medicine_Amount.data) <= 0 or int(form.Medicine_Amount.data) > 10):
+        if (int(form.Medicine_Amount.data) < 0 or int(form.Medicine_Amount.data) > 10):
             msg_text = "Error: You entered an invalid amount of %s, please try again." % str(medicine.Medicine_Name)
             flash(msg_text)
         else:
@@ -327,7 +334,7 @@ def change_medicine(id):
     return render_template("change_entity.html", form=form, title=title)
 
 
-# -------Stock -1-------
+# -------Medicine stock -1 functionality-------
 @app.route("/stock_minus_one/<id>", methods=["GET", "POST"])
 def stock_minus_one(id):
     medicine = Medicine.query.filter_by(Medicine_ID=id).first()
@@ -335,7 +342,7 @@ def stock_minus_one(id):
         medicine.Medicine_Amount -= 1
         db.session.commit()
     else:
-        flash("Error: Minimum stock is 0")
+        flash("Error: Minimum stock is 0.")
     return redirect("/medicine")
 
 
@@ -344,6 +351,7 @@ class RestockingMedicineForm(FlaskForm):
 
 
 # -------restock medicine-------
+# derives a bill and fills all medicine stocks up to 10
 @app.route("/restock_medicine", methods=["GET", "POST"])
 def restock_medicine():
     form = RestockingMedicineForm()
@@ -528,7 +536,6 @@ class ChangeEmployeeForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": " e.g. 8000.30"},
     )
-    # Define the choices for the dropdown menu
     choices = [
         ("Doctor", "Doctor"),
         ("Nurse", "Nurse"),
@@ -581,8 +588,3 @@ def change_employee(id):
         session["name"] = form.Employee_Name.data
         return redirect("/staff")
     return render_template("change_entity.html", form=form, title=title)
-
-
-## ------------- OTHER --------------- ###
-
-

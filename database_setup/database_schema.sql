@@ -103,7 +103,7 @@ ALTER TABLE IF EXISTS public."Medicine_Supplier"
     ADD FOREIGN KEY ("Medicine_Medicine_ID")
     REFERENCES public."Medicine" ("Medicine_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -111,7 +111,7 @@ ALTER TABLE IF EXISTS public."Medicine_Supplier"
     ADD FOREIGN KEY ("Supplier_Supplier_ID")
     REFERENCES public."Supplier" ("Supplier_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -119,7 +119,7 @@ ALTER TABLE IF EXISTS public."Patient"
     ADD FOREIGN KEY ("Address_ID")
     REFERENCES public."Address" ("Address_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -127,7 +127,7 @@ ALTER TABLE IF EXISTS public."Patient"
     ADD FOREIGN KEY ("Room_ID")
     REFERENCES public."Room" ("Room_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -135,7 +135,7 @@ ALTER TABLE IF EXISTS public."Patient_Medicine"
     ADD FOREIGN KEY ("Patient_Patient_ID")
     REFERENCES public."Patient" ("Patient_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -143,7 +143,7 @@ ALTER TABLE IF EXISTS public."Patient_Medicine"
     ADD FOREIGN KEY ("Medicine_Medicine_ID")
     REFERENCES public."Medicine" ("Medicine_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -151,7 +151,7 @@ ALTER TABLE IF EXISTS public."Address"
     ADD FOREIGN KEY ("Place_Postal_Code")
     REFERENCES public."Place" ("Place_Postal_Code") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -159,7 +159,7 @@ ALTER TABLE IF EXISTS public."Employee"
     ADD FOREIGN KEY ("Address_ID")
     REFERENCES public."Address" ("Address_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -167,7 +167,7 @@ ALTER TABLE IF EXISTS public."Room"
     ADD FOREIGN KEY ("Station_ID")
     REFERENCES public."Station" ("Station_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -175,7 +175,7 @@ ALTER TABLE IF EXISTS public."Station_Employee"
     ADD FOREIGN KEY ("Station_Station_ID")
     REFERENCES public."Station" ("Station_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
 
@@ -183,9 +183,10 @@ ALTER TABLE IF EXISTS public."Station_Employee"
     ADD FOREIGN KEY ("Employee_Employee_ID")
     REFERENCES public."Employee" ("Employee_ID") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     NOT VALID;
 
+/*Function which is responsible for deleting weak entity set Room if parent entity Station is deleted.*/
 CREATE FUNCTION fnc_DeleteRooms()
 	RETURNS TRIGGER AS
 	$$
@@ -197,6 +198,7 @@ CREATE FUNCTION fnc_DeleteRooms()
 	$$
 	LANGUAGE plpgsql;
 
+/*Function which is responsible for populating Age attribute of Patient every time a new one is created.*/
 CREATE FUNCTION calculate_age()
     RETURNS TRIGGER AS 
     $$
@@ -207,6 +209,7 @@ CREATE FUNCTION calculate_age()
     $$ 
     LANGUAGE plpgsql;
 
+/*Function which is responsible for updating Room_isFull attribute of Room every time one is edited or created.*/
 CREATE OR REPLACE FUNCTION update_room_isfull()
     RETURNS TRIGGER AS 
     $$
@@ -243,20 +246,38 @@ CREATE TRIGGER update_age_trigger
     FOR EACH ROW
     EXECUTE FUNCTION calculate_age();
 
-
+/*Simple views which are responsible for showing relevant Patient and Employee information.*/
 CREATE VIEW patient_details AS
-    SELECT p."Patient_Name", p."Patient_Forename", p."Patient_Sex", p."Patient_Age",
-           a."Address_Street", a."Address_HNr", a."Place_Postal_Code", pl."Place_Name"
-    FROM "Patient" p
-    JOIN "Address" a ON p."Address_ID" = a."Address_ID"
-    JOIN "Place" pl ON a."Place_Postal_Code" = pl."Place_Postal_Code";
+    SELECT 
+        "Patient"."Patient_Name",
+        "Patient"."Patient_Forename",
+        "Patient"."Patient_Sex",
+        "Patient"."Patient_Age",
+        "Address"."Address_Street",
+        "Address"."Address_HNr",
+        "Address"."Place_Postal_Code",
+        "Place"."Place_Name"
+    FROM 
+        "Patient"
+    JOIN 
+        "Address" ON "Patient"."Address_ID" = "Address"."Address_ID"
+    JOIN 
+        "Place" ON "Address"."Place_Postal_Code" = "Place"."Place_Postal_Code";
 
 CREATE VIEW employee_details AS
-    SELECT e."Employee_Name", e."Employee_Forename", e."Employee_Role",
-           a."Address_Street", a."Address_HNr", a."Place_Postal_Code", pl."Place_Name"
-    FROM "Employee" e
-    JOIN "Address" a ON e."Address_ID" = a."Address_ID"
-    JOIN "Place" pl ON a."Place_Postal_Code" = pl."Place_Postal_Code";
-
+    SELECT 
+        "Employee"."Employee_Name",
+        "Employee"."Employee_Forename",
+        "Employee"."Employee_Role",
+        "Address"."Address_Street",
+        "Address"."Address_HNr",
+        "Address"."Place_Postal_Code",
+        "Place"."Place_Name"
+    FROM 
+        "Employee"
+    JOIN 
+        "Address" ON "Employee"."Address_ID" = "Address"."Address_ID"
+    JOIN 
+        "Place" ON "Address"."Place_Postal_Code" = "Place"."Place_Postal_Code";
 
 END;
