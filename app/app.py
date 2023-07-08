@@ -12,7 +12,6 @@ import uuid
 # ------------------Basic Setup------------------
 # -----------------------------------------------
 
-
 app = Flask(__name__)
 app.secret_key = "super secret key"
 app.app_context().push()
@@ -588,3 +587,8 @@ def change_employee(id):
         session["name"] = form.Employee_Name.data
         return redirect("/staff")
     return render_template("change_entity.html", form=form, title=title)
+
+#-------------------OTHER-------------------
+
+if __name__ == "main":
+    app.run(host="0.0.0.0", port=5000)
