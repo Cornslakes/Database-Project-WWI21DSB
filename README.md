@@ -5,7 +5,11 @@ The use-case is a hospital system which let's you keep track of patients, employ
 After restocking your medicine a bill will be created which contains total cost.
 
 The whole project is dockerized.
-Adminer is included to try out predefined queries. Credentials are the following: admin/123/hospital
+Adminer is included to try out predefined queries. Credentials are the following:<br>
+Server: database-project<br>
+Benutzer: admin<br>
+Passwort: 123<br>
+Datenbank: hospital<br>
 
 # app_docker
 
@@ -14,7 +18,7 @@ Sadly the 0.0.0.0:5000 port inside the container which is bound to the flask-app
 
 To run this app version:
 
-`.\docker compose up`
+`docker compose up`
 
 The app should be available at:
 
