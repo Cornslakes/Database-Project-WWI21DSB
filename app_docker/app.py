@@ -216,7 +216,7 @@ def change_patient(id):
 def medicine_stock():
     title = "List of current medicine stock:"
     medicine = Medicine.query.order_by(Medicine.Medicine_Name.desc()).all()
-    return render_template("medicine.html", medicine=medicine)
+    return render_template("medicine.html", medicine=medicine, title=title)
 
 
 # -------Add Medicine-------
@@ -590,5 +590,5 @@ def change_employee(id):
 
 #-------------------OTHER-------------------
 
-if __name__ == "main":
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

@@ -11,9 +11,9 @@ services:
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: hospital
     volumes:
-      - ./app/database_setup/database_schema.sql:/docker-entrypoint-initdb.d/1-database_schema.sql
-      - ./app/database_setup/database_populate_place.sql:/docker-entrypoint-initdb.d/2-data_populate_place.sql
-      - ./app/database_setup/database_populate.sql:/docker-entrypoint-initdb.d/3-data_populate.sql
+      - ./app_docker/database_setup/database_schema.sql:/docker-entrypoint-initdb.d/1-database_schema.sql
+      - ./app_docker/database_setup/database_populate_place.sql:/docker-entrypoint-initdb.d/2-data_populate_place.sql
+      - ./app_docker/database_setup/database_populate.sql:/docker-entrypoint-initdb.d/3-data_populate.sql
 
   adminer:
     image: adminer

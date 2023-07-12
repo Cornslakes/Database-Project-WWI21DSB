@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
+title %}Company{% endblock %} {% block page_content %}
+<div class="page-header">
+  <h1>{{title}}</h1>
+  <a href="/add_medicine"
+    ><button class="btn btn-primary btn-md rounded-pill shadow">
+      Add new Medicine
+    </button></a
+  >
+  <a href="/restock_medicine"
+    ><button class="btn btn-primary btn-md rounded-pill shadow">
+      Restock Medicine
+    </button></a
+  >
+  <table class="table table-dark table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Pricing</th>
+        <th scope="col">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for medicine in medicine %}
+      <tr>
+        <td class="med_name">{{ loop.index }}</td>
+        <td class="med_name">{{medicine.Medicine_Name}}</td>
+        <td class="med_name">{{medicine.Medicine_Pricing}}</td>
+        <td class="med_name">{{medicine.Medicine_Amount}}</td>
+        <td class="med_name">
+          <a
+            href="{{ url_for('delete_medicine', id=medicine.Medicine_ID) }}"
+            onclick="return confirm('Do you want to permanently delete following medication: {{ medicine.Medicine_Name }}?');"
+            title="Delete Medicine"
+            ><button type="button" class="btn btn-danger">x</button></a
+          >
+          <a
+            href="{{ url_for('change_medicine', id=medicine.Medicine_ID) }}"
+            title="Change Medicine Info"
+            ><button type="button" class="btn">✎</button></a
+          >
+          <a
+            href="{{ url_for('stock_minus_one', id=medicine.Medicine_ID) }}"
+            title="Remove 1 item from stock"
+            ><button type="button" class="btn">-1</button></a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

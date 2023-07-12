@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
+title %}Company{% endblock %} {% block page_content %}
+<div class="page-header">
+  <h1>List of staffed employees:</h1>
+  <a href="/add_employee"
+    ><button class="btn btn-primary btn-md rounded-pill shadow">
+      Add new employee
+    </button></a
+  >
+  <table class="table table-dark table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Forename</th>
+        <th scope="col">Birthdate</th>
+        <th scope="col">Salary</th>
+        <th scope="col">Role</th>
+        <th scope="col">Address</th>
+        <th scope="col">HNr</th>
+        <th scope="col">Postal Code</th>
+        <th scope="col">City</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in employee %}
+      <tr>
+        <td class="med_name">{{ loop.index }}</td>
+        <td class="med_name">{{employee.Employee_Name}}</td>
+        <td class="med_name">{{employee.Employee_Forename}}</td>
+        <td class="med_name">{{employee.Employee_Birthdate}}</td>
+        <td class="med_name">{{employee.Employee_Salary}}</td>
+        <td class="med_name">{{employee.Employee_Role}}</td>
+        <td class="med_name">{{employee.Address_Street}}</td>
+        <td class="med_name">{{employee.Address_HNr}}</td>
+        <td class="med_name">{{employee.Place_Postal_Code}}</td>
+        <td class="med_name">{{employee.Place_Name}}</td>
+        <td class="med_name">
+          <a
+            href="{{ url_for('delete_employee', id=employee.Employee_ID) }}"
+            onclick="return confirm('Do you want to permanently delete following employee: {{ employee.Employee_Name }}?');"
+            title="Delete Employee"
+            ><button type="button" class="btn btn-danger">x</button></a
+          >
+          <a
+            href="{{ url_for('change_employee', id=employee.Employee_ID) }}"
+            title="Change Employee Info"
+            ><button type="button" class="btn btn-blue">✎</button></a
+          >
+          {% endfor %}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}

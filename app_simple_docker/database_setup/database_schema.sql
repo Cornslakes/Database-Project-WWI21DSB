@@ -280,4 +280,7 @@ CREATE VIEW employee_details AS
     JOIN 
         "Place" ON "Address"."Place_Postal_Code" = "Place"."Place_Postal_Code";
 
+/*Creates an index to improve performance of the business function queries.*/
+CREATE INDEX idx_medicine_id ON public."Medicine" ("Medicine_ID");
+
 END;
